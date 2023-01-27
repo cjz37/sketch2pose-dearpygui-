@@ -12,13 +12,55 @@ import tools
 from db_manage import *
 
 
-def print_me(sender):
-    print(f"Click Menu Item: {sender}")
+def global_resize():
+    cur_viewport_width = get_viewport_width()
+    cur_viewport_height = get_viewport_height()
 
+    set_item_height(
+        item="Tools",
+        height=cur_viewport_height - 315
+    )
 
-def show_window(sender, app_data, user_data):
-    pass
-        
+    set_item_pos(
+        item="miscTools",
+        pos=[0, cur_viewport_height - 290]
+    )
+
+    set_item_height(
+        item="Tool Specifications",
+        height=cur_viewport_height - 304
+    )
+
+    set_item_pos(
+        item="Mouse Pad Coordinates",
+        pos=[360, cur_viewport_height - 70]
+    )
+
+    set_item_width(
+        item="Mouse Pad Coordinates",
+        width=cur_viewport_width - 375
+    )
+
+    set_item_pos(
+        item="mouse info",
+        pos=[cur_viewport_width - 590, 3]
+    )
+
+    set_item_pos(
+        item="Info",
+        pos=[100, cur_viewport_height - 70]
+    )
+
+    set_item_width(
+        item="Pad",
+        width=cur_viewport_width - 375
+    )
+
+    set_item_height(
+        item="Pad",
+        height=cur_viewport_height - 86 - 32
+    )
+
 
 def open_website(sender, data):
     webbrowser.open(data)
@@ -428,8 +470,10 @@ create_context()
 with font_registry():
     default_font = add_font("fonts/OpenSans-Regular.ttf", 18)
 
+bind_font(default_font)
+
 # 主题设置
-with theme() as global_theme:
+with theme(tag="global theme"):
     with theme_component(mvAll):
         add_theme_style(mvStyleVar_ItemSpacing, 20.00, 5.00, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_WindowTitleAlign, 0.50, 0.50, category=mvThemeCat_Core)
@@ -439,9 +483,9 @@ with theme() as global_theme:
         add_theme_color(mvThemeCol_MenuBarBg, [55, 55, 55], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_WindowBg, [55, 55, 55], category=mvThemeCat_Core)
     
-bind_theme(global_theme)
+bind_theme("global theme")
 
-with theme() as tools_theme:
+with theme(tag="tools theme"):
     with theme_component(mvAll):
         add_theme_color(mvThemeCol_WindowBg, [40, 40, 40], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_TitleBg, [50, 50, 50], category=mvThemeCat_Core)
@@ -452,7 +496,7 @@ with theme() as tools_theme:
         add_theme_color(mvThemeCol_ScrollbarBg, [40, 40, 40], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_ScrollbarGrab, [100, 100, 100], category=mvThemeCat_Core)
 
-with theme() as miscTools_theme:
+with theme(tag="miscTools theme"):
     with theme_component(mvAll):
         add_theme_color(mvThemeCol_WindowBg, [40, 40, 40], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_TitleBg, [50, 50, 50], category=mvThemeCat_Core)
@@ -463,14 +507,15 @@ with theme() as miscTools_theme:
         add_theme_color(mvThemeCol_ScrollbarBg, [40, 40, 40], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_ScrollbarGrab, [100, 100, 100], category=mvThemeCat_Core)
 
-with theme() as mousePadCoordinates_theme:
+with theme(tag="foot bar theme"):
     with theme_component(mvAll):
-        add_theme_style(mvStyleVar_WindowPadding, 20, 0, category=mvThemeCat_Core)
-        
+        add_theme_style(mvStyleVar_WindowPadding, 20, 3, category=mvThemeCat_Core)
+        add_theme_style(mvStyleVar_WindowBorderSize, 0, category=mvThemeCat_Core)
+
         add_theme_color(mvThemeCol_WindowBg, [55, 55, 55], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_Text, [160, 160, 160], category=mvThemeCat_Core)
 
-with theme() as drawingPad_theme:
+with theme(tag="drawingPad theme"):
     with theme_component(mvAll):
         add_theme_style(mvStyleVar_WindowPadding, 0, 0, category=mvThemeCat_Core)
 
@@ -478,12 +523,12 @@ with theme() as drawingPad_theme:
         add_theme_color(mvThemeCol_TitleBg, [95, 95, 95], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_TitleBgActive, [95, 95, 95], category=mvThemeCat_Core)
 
-with theme() as popup_theme:
+with theme(tag="popup theme"):
     with theme_component(mvAll):
         add_theme_style(mvStyleVar_FrameBorderSize, 1.0, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_WindowRounding, 8, category=mvThemeCat_Core)
 
-with theme() as toolSpecifications_theme:
+with theme(tag="toolSpecifications theme"):
     with theme_component(mvAll):
         add_theme_style(mvStyleVar_ItemInnerSpacing, 5, 0, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_FrameRounding, 2.0, category=mvThemeCat_Core)
@@ -502,7 +547,7 @@ with theme() as toolSpecifications_theme:
         add_theme_color(mvThemeCol_FrameBgActive, [40, 40, 40], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_ChildBg, [80, 80, 80], category=mvThemeCat_Core)
 
-with theme() as colorSelector_theme:
+with theme(tag="colorSelector theme"):
     with theme_component(mvAll):
         add_theme_style(mvStyleVar_FramePadding, 4, 2, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_ItemInnerSpacing, 2, 4, category=mvThemeCat_Core)
@@ -573,18 +618,20 @@ with handler_registry(show=True, tag="mouse handler"):
     add_mouse_release_handler(button=mvMouseButton_Left, tag="ml_release")
     add_mouse_release_handler(button=mvMouseButton_Right, tag="mr_release")
 
-bind_font(default_font)
 
 create_viewport(
     title="Sketch2Pose",
     width=1400,
     height=740,
+    min_width=1000,
+    min_height=600,
     small_icon="icons/sp.ico",
     large_icon="icons/sp.ico",
-    resizable=False,
 )
 
-# Main window
+set_viewport_resize_callback(callback=global_resize)
+
+# Main window menu
 with viewport_menu_bar():
     with menu(label="File"):
         add_menu_item(
@@ -602,7 +649,7 @@ with viewport_menu_bar():
             callback=lambda: stop_dearpygui()
         )
 
-        add_separator()
+        # add_separator()
 
         # with menu(label="Settings"):
         #     add_menu_item(
@@ -683,7 +730,7 @@ with window(
     no_close=True,
     pos=[0, 25],
     width=80,
-    height=425,
+    height=get_viewport_height() - 315,
     no_title_bar=True,
 ):
     add_image_button(
@@ -750,7 +797,7 @@ with window(
     )
     add_spacer()
 
-bind_item_theme("Tools", tools_theme)
+bind_item_theme("Tools", "tools theme")
 
 # misc tools bar
 with window(
@@ -760,7 +807,7 @@ with window(
     no_resize=True,
     no_move=True,
     no_close=True,
-    pos=[0, 450],
+    pos=[0, get_viewport_height() - 290],
     width=80,
     height=260,
     no_title_bar=True,
@@ -782,7 +829,7 @@ with window(
         frame_padding=img_padding,
     )
 
-bind_item_theme("miscTools", miscTools_theme)
+bind_item_theme("miscTools", "miscTools theme")
 
 with popup(
     tag="reset popup",
@@ -808,7 +855,7 @@ with popup(
             callback=tool_callback_dispatcher,
         )
 
-bind_item_theme("reset popup", popup_theme)
+bind_item_theme("reset popup", "popup theme")
 
 # Color Selector
 with window(
@@ -831,7 +878,7 @@ with window(
         default_value=[30, 30, 30, 255],
     )
 
-bind_item_theme("Color Selector", colorSelector_theme)
+bind_item_theme("Color Selector", "colorSelector theme")
 
 # Tool Specifications
 with window(
@@ -842,12 +889,12 @@ with window(
     no_move=True,
     no_close=True,
     width=260,
-    height=436,
-    pos=(100, 235),
+    height=get_viewport_height() - 304,
+    pos=[100, 235],
 ):
     add_text(default_value="\t  To get started, please select one of\n\t  the tools from the column on the\n\t  left.")
 
-bind_item_theme("Tool Specifications", toolSpecifications_theme)
+bind_item_theme("Tool Specifications", "toolSpecifications theme")
 
 # Drawing Pad
 with window(
@@ -859,9 +906,9 @@ with window(
     no_close=True,
     pos=[360, 25],
 ):
-    add_drawlist(tag="Pad", width=1025, height=654)
+    add_drawlist(tag="Pad", width=get_viewport_width() - 375, height=get_viewport_height() - 118)
 
-bind_item_theme("Drawing Pad", drawingPad_theme)
+bind_item_theme("Drawing Pad", "drawingPad theme")
 
 with window(
     tag="Mouse Pad Coordinates",
@@ -871,12 +918,29 @@ with window(
     no_close=True,
     no_resize=True,
     no_title_bar=True,
-    min_size=[261, 40],
-    pos=[100, 670],
+    width=get_viewport_width() - 375,
+    height=40,
+    pos=[360, get_viewport_height() - 70],
 ):
-    add_text(tag="mouse info", default_value="Mouse coordinates:")
+    add_text(tag="mouse info", default_value="Mouse coordinates:", pos=[get_viewport_width() - 590, 3])
     
-bind_item_theme("Mouse Pad Coordinates", mousePadCoordinates_theme)
+bind_item_theme("Mouse Pad Coordinates", "foot bar theme")
+
+with window(
+    tag="Info",
+    label="Info",
+    no_collapse=True,
+    no_move=True,
+    no_close=True,
+    no_resize=True,
+    no_title_bar=True,
+    width=260,
+    height=40,
+    pos=[100, get_viewport_height() - 70],
+):
+    add_text(tag="development info", default_value="Power by Dearpygui", pos=[70, 3])
+
+bind_item_theme("Info", "foot bar theme")
 
 setup_dearpygui()
 show_viewport()

@@ -46,8 +46,8 @@ def imageTool(pad_name, file):
     #     set_item_callback(handler, _event_handler)
 
     # image = Image.open(file)
-    pad_width = 1025.0
-    pad_height = 654.0
+    pad_width = get_viewport_width() - 375
+    pad_height = get_viewport_height() - 118
     pad_ratio = pad_width / pad_height
 
     image = load_image(file)
