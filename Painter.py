@@ -122,7 +122,7 @@ def apply_settings(sender, data):
             disable_item(item="Generate")
             set_item_label(item="Generate", label="Generating")
             tools.autoSaveTool()
-            tools.generateTool("./temp/temp_file.png")
+            tools.generateTool("temp/temp_file.png")
             enable_item(item="Generate")
             set_item_label(item="Generate", label="Generate")
         elif "Image" == get_value(item="Generation method"):
