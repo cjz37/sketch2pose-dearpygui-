@@ -47,17 +47,17 @@ def global_resize():
     )
 
     set_item_pos(
-        item="Info",
+        item="Sys info",
         pos=[100, cur_viewport_height - 70]
     )
 
     set_item_width(
-        item="Pad",
+        item="Draw list",
         width=cur_viewport_width - 375
     )
 
     set_item_height(
-        item="Pad",
+        item="Draw list",
         height=cur_viewport_height - 86 - 32
     )
 
@@ -906,7 +906,8 @@ with window(
     no_close=True,
     pos=[360, 25],
 ):
-    add_drawlist(tag="Pad", width=get_viewport_width() - 375, height=get_viewport_height() - 118)
+    add_drawlist(tag="Draw list", width=get_viewport_width() - 375, height=get_viewport_height() - 118)
+    add_draw_layer(tag="Pad", parent="Draw list")
 
 bind_item_theme("Drawing Pad", "drawingPad theme")
 
@@ -927,8 +928,8 @@ with window(
 bind_item_theme("Mouse Pad Coordinates", "foot bar theme")
 
 with window(
-    tag="Info",
-    label="Info",
+    tag="Sys info",
+    label="Sys info",
     no_collapse=True,
     no_move=True,
     no_close=True,
@@ -940,10 +941,12 @@ with window(
 ):
     add_text(tag="development info", default_value="Power by Dearpygui", pos=[70, 3])
 
-bind_item_theme("Info", "foot bar theme")
+bind_item_theme("Sys info", "foot bar theme")
 
 setup_dearpygui()
 show_viewport()
 start_dearpygui()
+# while is_dearpygui_running():
+#     render_dearpygui_frame()
 destroy_context()
  
