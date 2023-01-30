@@ -1785,8 +1785,7 @@ def main():
         save_path.mkdir(exist_ok=True, parents=True)
         # if (save_path / "us_orig.png").is_file():
         #     return
-
-        summary_writer = SummaryWriter(log_dir=save_path / f"runDoknc2_{c_new_mse}")
+        summary_writer = SummaryWriter(log_dir=str(save_path / f"runDoknc2_{c_new_mse}"))
 
         img_original = cv2.cvtColor(img_original, cv2.COLOR_BGR2RGB)
         img_size_original = img_original.shape[:2]
@@ -1870,7 +1869,7 @@ def main():
 
         if args.use_cos:
             cos_r = get_cos(keypoints_3d_pred, args.use_angle_transf, loss_parallel)
-            np.save(save_path / "cos_hist", cos_r.cpu().numpy())
+            np.save(str(save_path / "cos_hist"), cos_r.cpu().numpy())
 
         rotmat_pred = dc_step(
             model_hmr,
