@@ -216,7 +216,7 @@ def tool_callbacks(caller_button):
         delete_item("Tool Specifications", children_only=True)
         
         doodle_specifications = ToolSpec(
-            title="             \tDoodle Tool Properties",
+            title="           Doodle Tool Properties",
             height=60,
         )
 
@@ -235,10 +235,10 @@ def tool_callbacks(caller_button):
         doodle_specifications.add_space(height=2)
 
         doodle_specifications.add_instructions(
-            value="\tLeft click on the drawing pad to set\n"
-                  "\tthe first point. Then left click, to end\n"
-                  "\tthe tool. Right click or hit escape key\n"
-                  "\tto undo the drawn line"
+            value="Left click on the drawing pad to set\n"
+                  "the first point. Then left click, to end\n"
+                  "the tool. Right click or hit escape key\n"
+                  "to undo the drawn line"
         )
 
         set_item_callback(
@@ -270,7 +270,7 @@ def tool_callbacks(caller_button):
         delete_item("Tool Specifications", children_only=True)
 
         bezier_specifications = ToolSpec(
-            title="            \tBezier Tool Properties",
+            title="           Bezier Tool Properties",
             height=100,
         )
 
@@ -298,14 +298,15 @@ def tool_callbacks(caller_button):
         )
 
         bezier_specifications.add_instructions(
-            value="\tLeft click on the drawing pad to set\n"
-                  "\tthe first point. Then left click to add\n"
-                  "\tthree more points. Right click or hit\n"
-                  "\tthe escape key on the keyboard to\n"
-                  "\tend the tool.\n\n"
-                  "\tIf you have selected the \"Close bezier\n"
-                  "\tcurve\" then the bezier curve will close\n"
-                  "\twhen the third point is selected")
+            value="Left click on the drawing pad to set\n"
+                  "the first point. Then left click to\n"
+                  "add three more points. Right click \n"
+                  "or hit the escape key on the key-\n"
+                  "board to end the tool.\n\n"
+                  "If you have selected the \"Close \n"
+                  "bezier curve\" then the bezier \n"
+                  "curve will close when the third \n"
+                  "point is selected")
 
         set_item_callback(
             item="Apply",
@@ -328,14 +329,14 @@ def tool_callbacks(caller_button):
         delete_item("Tool Specifications", children_only=True)
         
         image_specifications = ToolSpec(
-            title="               \tImage Tool Properties",
+            title="           Image Tool Properties",
             height=115
         )
 
         add_button(
             tag="Search image",
             label="Search image",
-            width=210,
+            width=225,
             height=30,
             parent="tool properties",
             callback=tools.searchImage,
@@ -348,21 +349,22 @@ def tool_callbacks(caller_button):
             multiline=True,
             readonly=True,
             parent="tool properties",
-            width=210,
-            height=40,
+            width=225,
+            height=42,
         )
 
         set_value("##imagePath", "Please select an image.")
 
-        image_specifications.add_instructions(value="\tSelect an image by clicking on the\n"
-                                                    "\t\"Search image\" button and then click\n"
-                                                    "\tapply. Left click on the drawing pad\n"
-                                                    "\tto select the first point and then left\n"
-                                                    "\tclick again to place the image.\n"
-                                                    "\n"
-                                                    "\tHold down shift while placing the\n"
-                                                    "\timage to fix the aspect ratio of the\n"
-                                                    "\timage.")
+        image_specifications.add_instructions(value="Select an image by clicking on the\n"
+                                                    "\"Search image\" button and then \n"
+                                                    "click apply. Left click on the \n"
+                                                    "drawing pad to select the first \n"
+                                                    "point and then left click again \n"
+                                                    "to place the image.\n"
+                                                    ""
+                                                    "Hold down shift while placing the\n"
+                                                    "image to fix the aspect ratio of \n"
+                                                    "the image.")
 
         set_item_callback(
             item="Apply",
@@ -378,7 +380,7 @@ def tool_callbacks(caller_button):
 
         delete_item("Tool Specifications", children_only=True)
         generate_specifications = GenerateSpec(
-            title="               Generate Tool Properties",
+            title="         Generate Tool Properties",
             height=64,
         )
         
@@ -468,20 +470,21 @@ create_context()
 
 # 字体设置
 with font_registry():
-    default_font = add_font("fonts/OpenSans-Regular.ttf", 18)
+    default_font = add_font("fonts/OpenSans-Regular.ttf", 19)
+    bigger_font = add_font("fonts/OpenSans-Regular.ttf", 19)
 
 bind_font(default_font)
 
 # 主题设置
 with theme(tag="global theme"):
     with theme_component(mvAll):
-        add_theme_style(mvStyleVar_ItemSpacing, 20.00, 5.00, category=mvThemeCat_Core)
+        add_theme_style(mvStyleVar_ItemSpacing, 10.00, 5.00, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_WindowTitleAlign, 0.50, 0.50, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_FrameBorderSize, 1.0)
         add_theme_style(mvStyleVar_WindowPadding, 20, 5, category=mvThemeCat_Core)
 
-        add_theme_color(mvThemeCol_MenuBarBg, [55, 55, 55], category=mvThemeCat_Core)
-        add_theme_color(mvThemeCol_WindowBg, [55, 55, 55], category=mvThemeCat_Core)
+        add_theme_color(mvThemeCol_MenuBarBg, [36, 36, 36], category=mvThemeCat_Core)
+        add_theme_color(mvThemeCol_WindowBg, [36, 36, 36], category=mvThemeCat_Core)
     
 bind_theme("global theme")
 
@@ -512,7 +515,7 @@ with theme(tag="foot bar theme"):
         add_theme_style(mvStyleVar_WindowPadding, 20, 3, category=mvThemeCat_Core)
         add_theme_style(mvStyleVar_WindowBorderSize, 0, category=mvThemeCat_Core)
 
-        add_theme_color(mvThemeCol_WindowBg, [55, 55, 55], category=mvThemeCat_Core)
+        add_theme_color(mvThemeCol_WindowBg, [36, 36, 36], category=mvThemeCat_Core)
         add_theme_color(mvThemeCol_Text, [160, 160, 160], category=mvThemeCat_Core)
 
 with theme(tag="drawingPad theme"):
@@ -632,8 +635,8 @@ create_viewport(
 set_viewport_resize_callback(callback=global_resize)
 
 # Main window menu
-with viewport_menu_bar():
-    with menu(label="File"):
+with viewport_menu_bar(tag="menu bar"):
+    with menu(label="File", tag="menu file"):
         add_menu_item(
             label="Open drawing", 
             callback=tools.openTool,
@@ -662,7 +665,7 @@ with viewport_menu_bar():
         #         callback=print_me,
         #     )
 
-    with menu(label="Edit"):
+    with menu(label="Edit", tag="menu edit"):
         add_menu_item(
             label="Undo",
             callback=lambda: read_db(action="undo"),
@@ -674,7 +677,7 @@ with viewport_menu_bar():
             shortcut='Ctrl + Shift + Z',
         )
 
-    with menu(label="Tools"):
+    with menu(label="Tools", tag="menu tools"):
         add_menu_item(
             label="Straight line tool", 
             callback=lambda: tool_callback_dispatcher(sender="straight line tool")
@@ -704,19 +707,24 @@ with viewport_menu_bar():
             callback=lambda: tool_callback_dispatcher(sender="image tool")
         )
     
-    with menu(label="Theme"):
+    with menu(label="Theme", tag="menu theme"):
         add_menu_item(
             label="Dark",
             user_data="dark",
             callback=theme_switcher,
         )
 
-    with menu(label="Help"):
+    with menu(label="Help", tag="menu help"):
         add_menu_item(
             label="Github",
             callback=lambda: open_website(sender=None, data="https://github.com/cjz37/sketch2pose-dearpygui"),
         )
-    
+
+# bind_item_font("menu file", bigger_font)
+# bind_item_font("menu edit", bigger_font)
+# bind_item_font("menu tools", bigger_font)
+# bind_item_font("menu theme", bigger_font)
+# bind_item_font("menu help", bigger_font)
 
 # Tools bar
 img_size = 45
@@ -837,7 +845,7 @@ with popup(
     modal=True,
     mousebutton=mvMouseButton_Left,
 ):
-    add_text("Are you sure you want to erase the drawing pad?", indent=15)
+    add_text("Are you sure you want to erase the drawing pad?", indent=0)
     add_spacer()
     with group(horizontal=True):
         add_button(
@@ -847,6 +855,7 @@ with popup(
             height=25, 
             callback=tool_callback_dispatcher,
         )
+        add_spacer(width=8)
         add_button(
             tag="No##reset",
             label="No##reset",
@@ -886,13 +895,14 @@ with window(
     label="Tool Specifications",
     no_collapse=True,
     no_resize=True,
+    no_scrollbar=True,
     no_move=True,
     no_close=True,
     width=260,
     height=get_viewport_height() - 304,
     pos=[100, 235],
 ):
-    add_text(default_value="\t  To get started, please select one of\n\t  the tools from the column on the\n\t  left.")
+    add_text(default_value="To get started, please select one of\nthe tools from the column on the\nleft.")
 
 bind_item_theme("Tool Specifications", "toolSpecifications theme")
 

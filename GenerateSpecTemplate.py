@@ -17,7 +17,8 @@ class GenerateSpec:
         with child_window(tag="tool properties", label="tool properties", height=self.height, parent=self.parent):
             self.add_space(height=4)
 
-        with group(horizontal=True, parent=self.parent):
+        groupWidth = get_item_width("Tool Specifications")//2 - 13
+        with group(horizontal=True, parent=self.parent, width=groupWidth):
             add_button(tag="Cancel", label="Cancel", height=30, width=110)
             # add_spacer(parent=self.parent)
             # add_same_line(spacing=8.0, parent=self.parent)
