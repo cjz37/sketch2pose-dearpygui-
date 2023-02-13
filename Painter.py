@@ -43,7 +43,7 @@ def global_resize():
 
     set_item_pos(
         item="mouse info",
-        pos=[cur_viewport_width - 590, 3]
+        pos=[get_viewport_width() - 620, 3]
     )
 
     set_item_pos(
@@ -434,6 +434,10 @@ def tool_callbacks(caller_button):
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
 
+    elif "open model editor tool" == caller_button:
+        print("\nopen model editor\n-------")
+        os.system('runModelEditor.bat')
+
 
 def tool_callback_dispatcher(sender):
     tool_thread = threading.Thread(
@@ -583,6 +587,7 @@ data.append(load_image("icons/dark-image-tool.png"))
 data.append(load_image("icons/canvas-color-tool.png"))
 data.append(load_image("icons/dark-generate-tool.png"))
 data.append(load_image("icons/dark-reset-tool.png"))  # 12
+data.append(load_image("icons/open-model-editor-tool.png"))
 
 # data.append(load_image("icons/dark-arrow-tool.png")[3])
 # data.append(load_image("icons/dark-bezier-tool.png")[3])
@@ -611,6 +616,7 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[10][0], height=data[10][1], default_value=data[10][3], tag="canvas color tool texture")
     add_static_texture(width=data[11][0], height=data[11][1], default_value=data[11][3], tag="generate tool texture")
     add_static_texture(width=data[12][0], height=data[12][1], default_value=data[12][3], tag="reset tool texture")
+    add_static_texture(width=data[13][0], height=data[13][1], default_value=data[13][3], tag="open model editor tool texture")
 
 
 with handler_registry(show=True, tag="global handler"):
@@ -836,6 +842,15 @@ with window(
         height=img_size,
         frame_padding=img_padding,
     )
+    add_spacer()
+    add_image_button(
+        tag="open model editor tool",
+        texture_tag="open model editor tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher
+    )
 
 bind_item_theme("miscTools", "miscTools theme")
 
@@ -933,7 +948,7 @@ with window(
     height=40,
     pos=[360, get_viewport_height() - 70],
 ):
-    add_text(tag="mouse info", default_value="Mouse coordinates:", pos=[get_viewport_width() - 590, 3])
+    add_text(tag="mouse info", default_value="Mouse coordinates:", pos=[get_viewport_width() - 620, 3])
     
 bind_item_theme("Mouse Pad Coordinates", "foot bar theme")
 
