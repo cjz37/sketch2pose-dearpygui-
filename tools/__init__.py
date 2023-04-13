@@ -17,6 +17,8 @@ from tools.polylineTool import polylineTool
 
 from tools.doodleTool import doodleTool
 
+from tools.curveTool import curveTool
+
 from tools.rectangleTool import rectangleTool
 from tools.rectangleTool import fillRectangleCheckbox
 from tools.rectangleTool import fillRectangleSameCheckbox
@@ -33,3 +35,7 @@ from tools.imageTool import searchImage
 from tools.generateTool import generateTool
 
 from tools.runModelEditor import runModelEditor
+
+from tools.bbwTool import bbwTool
+
+from tools.skeletonTool import skeletonTool

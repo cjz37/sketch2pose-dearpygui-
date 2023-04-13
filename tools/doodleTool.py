@@ -29,8 +29,8 @@ def doodleTool(pad_name, lineColor, lineThickness):
     def _event_handler(sender, data):
         nonlocal button_id
         nonlocal is_release
-        type = get_item_info(sender)["type"]
-        if type == "mvAppItemType::mvMouseReleaseHandler":
+        mouse_type = get_item_info(sender)["type"]
+        if mouse_type == "mvAppItemType::mvMouseReleaseHandler":
             button_id = data
             is_release = True
 

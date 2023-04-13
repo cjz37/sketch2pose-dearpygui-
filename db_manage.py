@@ -98,6 +98,9 @@ def write_db(tool: str, point_1='', point_2='', point_3='', point_4='', color=''
         c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Point_2, Point_3, Point_4, Color, Thickness, Tag)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""", (row_count, tool, point_1, point_2, point_3, point_4, color, thickness, tag))
 
+    elif tool == "curve tool":
+        pass
+
     elif tool == "text tool":
         c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Color, Size, Text, Tag)
         VALUES (?, ?, ?, ?, ?, ?, ?)""", (row_count, tool, point_1, color, size, text, tag))
@@ -240,6 +243,9 @@ def read_db(action: str):
                 tag=toolInfo[6],
                 parent="Pad",
             )
+
+        elif tool == 'curve tool':
+            pass
 
         elif tool == 'text tool':
             toolInfo = c.execute(f"SELECT Point_1, Color, Size, Text, Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
@@ -405,6 +411,9 @@ def open_db(filepath):
             )
 
             tools.bezier_count = int(toolInfo[6][-1]) + 1
+
+        elif tool == 'curve tool':
+            pass
 
         elif tool == 'text tool':
             toolInfo = c.execute(

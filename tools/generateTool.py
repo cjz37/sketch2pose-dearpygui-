@@ -1,14 +1,16 @@
 import os
 import threading
 from tools.runModelEditor import runModelEditor
+import tools
 
 
 def generateTool(image_path):
-    create_generation_cmd(image_path)
-    print('Create generate.bat')
-    generate()
-    print('The model has been successfully generated!')
-    runModelEditor(image_path)
+
+    t = threading.Thread(target=generate(image_path))
+    t.daemon = True
+    t.start()
+    # print('The model has been successfully generated!')
+    # runModelEditor(image_path)
 
 
 def create_generation_cmd(image_path):
@@ -19,5 +21,13 @@ def create_generation_cmd(image_path):
     file.close()
 
 
-def generate():
+def generate(image_path):
+    create_generation_cmd(image_path)
+    print('Create generate.bat')
+
+    tools.autoSaveTool()
+
     os.system('generate.bat')
+    print('The model has been successfully generated!')
+
+    runModelEditor(image_path)

@@ -15,7 +15,7 @@ def bezierTool(pad_name, lineColor, lineThickness):
         if is_release and mvMouseButton_Left == button_id:
             is_release = False
             return True
-        
+
         return False
 
     def isMouseButtonRightReleased():
@@ -24,20 +24,20 @@ def bezierTool(pad_name, lineColor, lineThickness):
         if is_release and mvMouseButton_Right == button_id:
             is_release = False
             return True
-        
+
         return False
 
     def _event_handler(sender, data):
         nonlocal button_id
         nonlocal is_release
-        type = get_item_info(sender)["type"]
-        if type == "mvAppItemType::mvMouseReleaseHandler":
+        mouse_type = get_item_info(sender)["type"]
+        if mouse_type == "mvAppItemType::mvMouseReleaseHandler":
             button_id = data
             is_release = True
 
     for handler in get_item_children("mouse handler", 1):
         set_item_callback(handler, _event_handler)
-    
+
     while True:
         temp_polyline_count = 0
         bezier_points = []

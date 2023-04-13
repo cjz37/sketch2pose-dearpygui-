@@ -71,30 +71,12 @@ def pad_mouse_coordinates():
               f"Mouse coordinates: {get_drawing_mouse_pos()}")
 
     # Display cross cursor on pad
-    # delete_item("cursorX")
-    # delete_item("cursorY")
     delete_item("cursor circle")
     delete_item("cursor node")
 
     mouse_x = get_drawing_mouse_pos()[0]
     mouse_y = get_drawing_mouse_pos()[1]
 
-    # draw_line(
-    #     p1=(mouse_x - 10, mouse_y),
-    #     p2=(mouse_x + 10, mouse_y),
-    #     tag="cursorX", 
-    #     parent="pad", 
-    #     color=[100, 100, 100], 
-    #     thickness=2,
-    # )
-    # draw_line(
-    #     p1=(mouse_x, mouse_y - 10),
-    #     p2=(mouse_x, mouse_y + 10),
-    #     tag="cursorY", 
-    #     parent="pad",
-    #     color=[100, 100, 100],
-    #     thickness=2,
-    # )
     draw_circle(
         center=[mouse_x, mouse_y],
         radius=8,
@@ -128,24 +110,30 @@ def apply_settings(sender, data):
     if data == "polyline tool":
         tools.polylineTool("Pad", get_value("Color"), get_value("Thickness"))
 
+    if data == "eraser tool":
+        tools.doodleTool("Pad", [255., 255., 255., 255.], get_value("Thickness"))
+
     if data == "doodle tool":
         tools.doodleTool("Pad", get_value("Color"), get_value("Thickness"))
+
+    if data == "curve tool":
+        tools.curveTool("Pad", get_value("Color"), get_value("Thickness"))
 
     if data == "rectangle tool":
         if get_value("Fill rectangle"):
             if get_value("Fill with same color"):
                 tools.rectangleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Rounding"), get_value("Color"))
             else:
-                tools.rectangleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Rounding"), get_value("Fill color"))
+                tools.rectangleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Rounding"), get_value("Fill Color"))
         else:
             tools.rectangleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Rounding"), [0, 0, 0, 0])
 
     if data == "circle tool":
-        if get_value("Fill circle"):
+        if get_value("Fill Circle"):
             if get_value("Fill with same color"):
                 tools.circleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Color"))
             else:
-                tools.circleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Fill color"))
+                tools.circleTool("Pad", get_value("Color"), get_value("Thickness"), get_value("Fill Color"))
         else:
             tools.circleTool("Pad", get_value("Color"), get_value("Thickness"), [0, 0, 0, 0])
 
@@ -157,19 +145,24 @@ def apply_settings(sender, data):
             tools.imageTool("Pad", get_value("##imagePath"))
         else:
             pass
-        
+
+    if data == 'bbw tool':
+        tools.bbwTool("Pad")
+
+    if data == 'skeleton tool':
+        tools.skeletonTool("Pad")
+
     if data == 'generate tool':
         if "Canvas" == get_value(item="Generation method"):
             print("generating from canvas ... ...")
             disable_item(item="Generate")
             set_item_label(item="Generate", label="Generating")
-            tools.autoSaveTool()
             tools.generateTool("temp/temp_file.png")
             enable_item(item="Generate")
             set_item_label(item="Generate", label="Generate")
         elif "Image" == get_value(item="Generation method"):
             temp_image_path = get_value("##imagePath")
-            if get_value("##imagePath") != "Please select an image.":
+            if temp_image_path != "Please select an image.":
                 print("generating from image ... ...")
                 disable_item(item="Generate")
                 set_item_label(item="Generate", label="Generating")
@@ -198,7 +191,7 @@ def tool_callbacks(caller_button):
         configure_item("reset popup", show=False)
         delete_item("Tool Specifications", children_only=True)
         add_text(
-            default_value="\t  To get started, please select one of\n\t  the tools from the column on the\n\t  left.",
+            default_value="To get started, please select one of\nthe tools from the column on the\nleft.",
             parent="Tool Specifications",
         )
         tools.resetPad("Pad")
@@ -207,9 +200,167 @@ def tool_callbacks(caller_button):
         print("\nstraight line tool\n-------")
         delete_item("Tool Specifications", children_only=True)
 
+        straight_line_specifications = ToolSpec(
+            title="        Straight Line Tool Properties", height=60)
+
+        add_input_int(
+            tag="Thickness",
+            label="Thickness",
+            default_value=2,
+            min_value=1,
+            width=145,
+            parent="tool properties"
+        )
+        straight_line_specifications.add_space(height=2)
+        straight_line_specifications.add_instructions(value="Left click on the drawing pad to set\n"
+                                                            "the first point. Then left click, right\n"
+                                                            "click or hit escape key to end the line\n"
+                                                            "tool.")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="straight line tool"))
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"))
+
+        # Straight line main function call
+        tools.straightLineTool("Pad", get_value(
+            "Color"), get_value("Thickness"))
+
     elif "polyline tool" == caller_button:
         print("\npolyline tool\n-------")
         delete_item("Tool Specifications", children_only=True)
+
+        polyline_specifications = ToolSpec(
+            title="            Polyline Tool Properties", height=100)
+
+        add_input_int(
+            tag="Thickness",
+            label="Thickness",
+            default_value=2,
+            min_value=1,
+            width=145,
+            parent="tool properties"
+        )
+        polyline_specifications.add_space(height=2)
+        polyline_specifications.add_separate()
+        polyline_specifications.add_space(height=2)
+        add_checkbox(
+            tag="Close polyline",
+            label="Close polyline",
+            default_value=False,
+            parent="tool properties"
+        )
+
+        polyline_specifications.add_instructions(value="Left click on the drawing pad to set\n"
+                                                       "the first point. Then left click to add\n"
+                                                       "more points. Right click or hit the\n"
+                                                       "escape key on the keyboard to end\n"
+                                                       "the line tool.\n"
+                                                       "\n"
+                                                       "If you have selected \"Close polyline\",\n"
+                                                       "then the polyline will close when the\n"
+                                                       "tool is terminated")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="polyline tool"))
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"))
+
+        # Polyline main function call
+        tools.polylineTool("Pad", get_value("Color"), get_value("Thickness"))
+
+    elif "curve tool" == caller_button:
+        print("\ncurve tool\n-------")
+        delete_item("Tool Specifications", children_only=True)
+
+        curve_specifications = ToolSpec(
+            title="           Curve Tool Properties",
+            height=60,
+        )
+
+        add_input_int(
+            tag="Thickness",
+            label="Thickness",
+            default_value=2,
+            min_value=1,
+            min_clamped=True,
+            max_value=20,
+            max_clamped=True,
+            width=145,
+            parent="tool properties",
+        )
+
+        curve_specifications.add_space(height=2)
+
+        curve_specifications.add_instructions(
+            value="Left click on the drawing pad.\n")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="curve tool"),
+        )
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
+        )
+
+        # Curve main function call
+        tools.curveTool(
+            pad_name="Pad",
+            lineColor=get_value("Color"),
+            lineThickness=get_value("Thickness")
+        )
+
+    elif "eraser tool" == caller_button:
+        print("\neraser tool\n-------")
+        delete_item("Tool Specifications", children_only=True)
+
+        eraser_specifications = ToolSpec(
+            title="           Eraser Tool Properties",
+            height=60,
+        )
+
+        add_input_int(
+            tag="Thickness",
+            label="Thickness",
+            default_value=20,
+            min_value=20,
+            min_clamped=True,
+            max_value=60,
+            max_clamped=True,
+            width=145,
+            step=5,
+            parent="tool properties",
+        )
+
+        eraser_specifications.add_space(height=2)
+
+        eraser_specifications.add_instructions(
+            value="Left click on the drawing pad to set\n"
+                  "the first point. Then left click, to end\n"
+                  "the tool. Right click or hit escape key\n"
+                  "to undo the drawn line"
+        )
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="eraser tool"),
+        )
+
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="eraser tool"),
+        )
+
+        tools.doodleTool(
+            pad_name="Pad",
+            lineColor=[255., 255., 255., 255.],
+            lineThickness=get_value("Thickness"),
+        )
         
     elif "doodle tool" == caller_button:
         print("\ndoodle tool\n-------")
@@ -257,23 +408,133 @@ def tool_callbacks(caller_button):
             lineThickness=get_value("Thickness"),
         )
 
+    elif "skeleton tool" == caller_button:
+        print("\nskeleton tool\n-------")
+        delete_item("Tool Specifications", children_only=True)
+
+        skeleton_specifications = ToolSpec(
+            title="            Skeleton Tool Properties",
+            height=60,
+        )
+
+        skeleton_specifications.add_instructions(value="skeleton test")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="skeleton tool"),
+        )
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
+        )
+
+        tools.skeletonTool(pad_name="Pad")
+
     elif "rectangle tool" == caller_button:
         print("\nrectangle tool\n-------")
         delete_item("Tool Specifications", children_only=True)
+
+        rectangle_specifications = ToolSpec(
+            title="            Rectangle Tool Properties",
+            height=175
+        )
+
+        add_input_float(
+            tag="Thickness",
+            label="Thickness",
+            default_value=2,
+            step=1,
+            min_value=1,
+            width=145,
+            parent="tool properties"
+        )
+        rectangle_specifications.add_space(height=2)
+        add_input_float(
+            tag="Rounding",
+            label="Rounding",
+            default_value=0,
+            step=1,
+            min_value=0,
+            width=145,
+            parent="tool properties"
+        )
+        rectangle_specifications.add_space(height=2)
+        rectangle_specifications.add_separate()
+        rectangle_specifications.add_space(height=2)
+        add_checkbox(
+            tag="Fill rectangle",
+            label="Fill rectangle",
+            default_value=False,
+            parent="tool properties",
+            callback=tools.fillRectangleCheckbox
+        )
+
+        rectangle_specifications.add_instructions(value="Left click on the drawing pad to set\n"
+                                                        "the first point. Then left click to set\n"
+                                                        "the second point. Right click or hit\n"
+                                                        "escape key to end the tool")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="rectangle tool"))
+        set_item_callback(
+            "Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"))
+
+        # Doodle main function call
+        tools.rectangleTool("Pad", get_value("Color"), get_value(
+            "Thickness"), get_value("Rounding"), [0, 0, 0, 0])
 
     elif "circle tool" == caller_button:
         print("\ncircle tool\n-------")
         delete_item("Tool Specifications", children_only=True)
 
+        circle_specifications = ToolSpec(
+            title="            Circle Tool Properties", height=135)
+
+        add_input_float(
+            tag="Thickness",
+            label="Thickness",
+            default_value=2,
+            step=1,
+            min_value=1,
+            width=145,
+            parent="tool properties"
+        )
+        circle_specifications.add_space(height=2)
+        circle_specifications.add_separate()
+        circle_specifications.add_space(height=1)
+        add_checkbox(
+            tag="Fill Circle",
+            label="Fill Circle",
+            default_value=False,
+            parent="tool properties",
+            callback=tools.fillCircleCheckbox
+        )
+
+        circle_specifications.add_instructions(value="Left click on the drawing pad to set\n"
+                                                     "the centre point. Then left click to set\n"
+                                                     "the radius. Right click or hit\n"
+                                                     "escape key to end the tool")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="circle tool"))
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"))
+
+        # Circle main function call
+        tools.circleTool("Pad", get_value("Color"),
+                         get_value("Thickness"), [0, 0, 0, 0])
+
     elif "bezier tool" == caller_button:
         print("\nbezier tool\n-------")
         delete_item("Tool Specifications", children_only=True)
-
         bezier_specifications = ToolSpec(
             title="           Bezier Tool Properties",
             height=100,
         )
-
         add_input_int(
             tag="Thickness", 
             label="Thickness", 
@@ -285,9 +546,7 @@ def tool_callbacks(caller_button):
             width=145, 
             parent="tool properties",
         )
-
         bezier_specifications.add_space(height=2)
-
         bezier_specifications.add_separate()
         bezier_specifications.add_space(height=2)
         add_checkbox(
@@ -296,7 +555,6 @@ def tool_callbacks(caller_button):
             default_value=False,
             parent="tool properties",
         )
-
         bezier_specifications.add_instructions(
             value="Left click on the drawing pad to set\n"
                   "the first point. Then left click to\n"
@@ -307,7 +565,6 @@ def tool_callbacks(caller_button):
                   "bezier curve\" then the bezier \n"
                   "curve will close when the third \n"
                   "point is selected")
-
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bezier tool"),
@@ -316,7 +573,6 @@ def tool_callbacks(caller_button):
             item="Cancel", 
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
-
         # Bezier main function call
         tools.bezierTool(
             pad_name="Pad", 
@@ -374,6 +630,28 @@ def tool_callbacks(caller_button):
             item="Cancel",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
+
+    elif "bbw tool" == caller_button:
+        print("\nbbw tool\n-------")
+
+        delete_item("Tool Specifications", children_only=True)
+        bbw_specifications = ToolSpec(
+            title="           BBW Tool Properties",
+            height=60
+        )
+
+        bbw_specifications.add_instructions(value="bbw test")
+
+        set_item_callback(
+            item="Apply",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bbw tool"),
+        )
+        set_item_callback(
+            item="Cancel",
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
+        )
+
+        tools.bbwTool(pad_name="Pad")
     
     elif "generate tool" == caller_button:
         print("\ngenerate tool\n-------")
@@ -574,6 +852,7 @@ with theme(tag="colorSelector theme"):
 
 # 纹理加载
 data = list()
+# light icons
 data.append(load_image("icons/dark-straight-line-tool.png"))  # 0
 data.append(load_image("icons/dark-dashed-line-tool.png"))
 data.append(load_image("icons/dark-polyline-tool.png"))
@@ -588,7 +867,29 @@ data.append(load_image("icons/canvas-color-tool.png"))
 data.append(load_image("icons/dark-generate-tool.png"))
 data.append(load_image("icons/dark-reset-tool.png"))  # 12
 data.append(load_image("icons/open-model-editor-tool.png"))
+data.append(load_image("icons/dark-curve-tool.png"))
+data.append(load_image("icons/colorPickup-tool.png"))
+data.append(load_image("icons/bbw-tool.png"))  # 16
+data.append(load_image("data/images/smpl.png"))
+data.append(load_image("icons/eraser-tool.png"))
+data.append(load_image("icons/skeleton-tool.png"))
+data.append(load_image("data/body/big-arm-left.png"))   # 20
+data.append(load_image("data/body/big-arm-right.png"))
+data.append(load_image("data/body/calf-left.png"))
+data.append(load_image("data/body/calf-right.png"))
+data.append(load_image("data/body/foot-left.png"))   # 24
+data.append(load_image("data/body/foot-right.png"))
+data.append(load_image("data/body/forearm-left.png"))
+data.append(load_image("data/body/forearm-right.png"))
+data.append(load_image("data/body/head.png"))   # 28
+data.append(load_image("data/body/hip.png"))
+data.append(load_image("data/body/palm-left.png"))
+data.append(load_image("data/body/palm-right.png"))
+data.append(load_image("data/body/thigh-left.png"))   # 32
+data.append(load_image("data/body/thigh-right.png"))
+data.append(load_image("data/body/upper-body.png"))
 
+# dark icons
 # data.append(load_image("icons/dark-arrow-tool.png")[3])
 # data.append(load_image("icons/dark-bezier-tool.png")[3])
 # data.append(load_image("icons/dark-circle-tool.png")[3])
@@ -617,6 +918,27 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[11][0], height=data[11][1], default_value=data[11][3], tag="generate tool texture")
     add_static_texture(width=data[12][0], height=data[12][1], default_value=data[12][3], tag="reset tool texture")
     add_static_texture(width=data[13][0], height=data[13][1], default_value=data[13][3], tag="open model editor tool texture")
+    add_static_texture(width=data[14][0], height=data[14][1], default_value=data[14][3], tag="curve tool texture")
+    add_static_texture(width=data[15][0], height=data[15][1], default_value=data[15][3], tag="color pickup tool texture")
+    add_static_texture(width=data[16][0], height=data[16][1], default_value=data[16][3], tag="bbw tool texture")
+    add_static_texture(width=data[17][0], height=data[17][1], default_value=data[17][3], tag="bbw template texture")
+    add_static_texture(width=data[18][0], height=data[18][1], default_value=data[18][3], tag="eraser tool texture")
+    add_static_texture(width=data[19][0], height=data[19][1], default_value=data[19][3], tag="skeleton tool texture")
+    add_static_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="big arm left")
+    add_static_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="big arm right")
+    add_static_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="calf left")
+    add_static_texture(width=data[23][0], height=data[23][1], default_value=data[23][3], tag="calf right")
+    add_static_texture(width=data[24][0], height=data[24][1], default_value=data[24][3], tag="foot left")
+    add_static_texture(width=data[25][0], height=data[25][1], default_value=data[25][3], tag="foot right")
+    add_static_texture(width=data[26][0], height=data[26][1], default_value=data[26][3], tag="forearm left")
+    add_static_texture(width=data[27][0], height=data[27][1], default_value=data[27][3], tag="forearm right")
+    add_static_texture(width=data[28][0], height=data[28][1], default_value=data[28][3], tag="head")
+    add_static_texture(width=data[29][0], height=data[29][1], default_value=data[29][3], tag="hip")
+    add_static_texture(width=data[30][0], height=data[30][1], default_value=data[30][3], tag="palm left")
+    add_static_texture(width=data[31][0], height=data[31][1], default_value=data[31][3], tag="palm right")
+    add_static_texture(width=data[32][0], height=data[32][1], default_value=data[32][3], tag="thigh left")
+    add_static_texture(width=data[33][0], height=data[33][1], default_value=data[33][3], tag="thigh right")
+    add_static_texture(width=data[34][0], height=data[34][1], default_value=data[34][3], tag="upper bofy")
 
 
 with handler_registry(show=True, tag="global handler"):
@@ -630,12 +952,13 @@ with handler_registry(show=True, tag="mouse handler"):
 
 create_viewport(
     title="Sketch2Pose",
-    width=1400,
-    height=740,
+    width=1600,
+    height=870,
     min_width=1000,
     min_height=600,
     small_icon="icons/sp.ico",
     large_icon="icons/sp.ico",
+    resizable=True,
 )
 
 set_viewport_resize_callback(callback=global_resize)
@@ -658,19 +981,6 @@ with viewport_menu_bar(tag="menu bar"):
             callback=lambda: stop_dearpygui()
         )
 
-        # add_separator()
-
-        # with menu(label="Settings"):
-        #     add_menu_item(
-        #         label="Setting 1",
-        #         callback=print_me,
-        #         check=True
-        #     )
-        #     add_menu_item(
-        #         label="Setting 2",
-        #         callback=print_me,
-        #     )
-
     with menu(label="Edit", tag="menu edit"):
         add_menu_item(
             label="Undo",
@@ -685,6 +995,10 @@ with viewport_menu_bar(tag="menu bar"):
 
     with menu(label="Tools", tag="menu tools"):
         add_menu_item(
+            label="Doodle tool",
+            callback=lambda: tool_callback_dispatcher(sender="doodle tool")
+        )
+        add_menu_item(
             label="Straight line tool", 
             callback=lambda: tool_callback_dispatcher(sender="straight line tool")
         )
@@ -693,8 +1007,8 @@ with viewport_menu_bar(tag="menu bar"):
             callback=lambda: tool_callback_dispatcher(sender="polyline tool")
         )
         add_menu_item(
-            label="Doodle tool", 
-            callback=lambda: tool_callback_dispatcher(sender="doodle tool")
+            label="Curve tool",
+            callback=lambda: tool_callback_dispatcher(sender="curve tool")
         )
         add_menu_item(
             label="Rectangle tool", 
@@ -726,12 +1040,6 @@ with viewport_menu_bar(tag="menu bar"):
             callback=lambda: open_website(sender=None, data="https://github.com/cjz37/sketch2pose-dearpygui"),
         )
 
-# bind_item_font("menu file", bigger_font)
-# bind_item_font("menu edit", bigger_font)
-# bind_item_font("menu tools", bigger_font)
-# bind_item_font("menu theme", bigger_font)
-# bind_item_font("menu help", bigger_font)
-
 # Tools bar
 img_size = 45
 img_padding = 5
@@ -747,6 +1055,33 @@ with window(
     height=get_viewport_height() - 315,
     no_title_bar=True,
 ):
+    add_image_button(
+        tag="doodle tool",
+        texture_tag="doodle tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher,
+    )
+    add_spacer()
+    add_image_button(
+        tag="eraser tool",
+        texture_tag="eraser tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher,
+    )
+    add_spacer()
+    add_image_button(
+        tag="skeleton tool",
+        texture_tag="skeleton tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher,
+    )
+    add_spacer()
     add_image_button(
         tag="straight line tool",
         texture_tag="straight line tool texture",
@@ -766,8 +1101,8 @@ with window(
     )
     add_spacer()
     add_image_button(
-        tag="doodle tool",
-        texture_tag="doodle tool texture",
+        tag="curve tool",
+        texture_tag="curve tool texture",
         width=img_size,
         height=img_size,
         frame_padding=img_padding,
@@ -810,6 +1145,23 @@ with window(
         callback=tool_callback_dispatcher
     )
     add_spacer()
+    add_image_button(
+        tag="bbw tool",
+        texture_tag="bbw tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher
+    )
+    add_spacer()
+    add_image_button(
+        tag="color pickup tool",
+        texture_tag="color pickup tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher
+    )
 
 bind_item_theme("Tools", "tools theme")
 
@@ -971,7 +1323,5 @@ bind_item_theme("Sys info", "foot bar theme")
 setup_dearpygui()
 show_viewport()
 start_dearpygui()
-# while is_dearpygui_running():
-#     render_dearpygui_frame()
 destroy_context()
  
