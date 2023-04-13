@@ -6,8 +6,10 @@ import tools
 
 def generateTool(image_path):
 
-    t = threading.Thread(target=generate(image_path))
-    t.daemon = True
+    t = threading.Thread(
+        target=generate(image_path),
+        daemon=True,
+    )
     t.start()
     # print('The model has been successfully generated!')
     # runModelEditor(image_path)
@@ -29,5 +31,3 @@ def generate(image_path):
 
     os.system('generate.bat')
     print('The model has been successfully generated!')
-
-    runModelEditor(image_path)

@@ -86,6 +86,7 @@ def bbwTool(pad_name):
     control_points = initPad(pad_name, num_control_points, point_radius, point_color)
     while True:
 
+        # move control point
         if is_mouse_button_down(mvMouseButton_Left):
             current_mouse_pos = get_mouse_pos()
 
@@ -117,6 +118,7 @@ def bbwTool(pad_name):
                             parent=pad_name)
                     control_points[i] = current_mouse_pos
 
+        # add a control point
         if isMouseButtonRightReleased():
 
             current_mouse_pos = get_mouse_pos()

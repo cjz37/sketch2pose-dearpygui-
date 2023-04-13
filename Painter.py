@@ -71,29 +71,29 @@ def pad_mouse_coordinates():
               f"Mouse coordinates: {get_drawing_mouse_pos()}")
 
     # Display cross cursor on pad
-    delete_item("cursor circle")
-    delete_item("cursor node")
-
-    mouse_x = get_drawing_mouse_pos()[0]
-    mouse_y = get_drawing_mouse_pos()[1]
-
-    draw_circle(
-        center=[mouse_x, mouse_y],
-        radius=8,
-        tag="cursor circle", 
-        parent="Pad",
-        color=[100, 100, 100],
-        thickness=2,
-    )
-    draw_circle(
-        center=[mouse_x, mouse_y],
-        radius=2,
-        tag="cursor node", 
-        parent="Pad",
-        color=[100, 100, 100],
-        fill=[100, 100, 100],
-        thickness=0,
-    )
+    # delete_item("cursor circle")
+    # delete_item("cursor node")
+    #
+    # mouse_x = get_drawing_mouse_pos()[0]
+    # mouse_y = get_drawing_mouse_pos()[1]
+    #
+    # draw_circle(
+    #     center=[mouse_x, mouse_y],
+    #     radius=8,
+    #     tag="cursor circle",
+    #     parent="Pad",
+    #     color=[100, 100, 100],
+    #     thickness=2,
+    # )
+    # draw_circle(
+    #     center=[mouse_x, mouse_y],
+    #     radius=2,
+    #     tag="cursor node",
+    #     parent="Pad",
+    #     color=[100, 100, 100],
+    #     fill=[100, 100, 100],
+    #     thickness=0,
+    # )
 
 
 def apply_settings(sender, data):
@@ -160,6 +160,7 @@ def apply_settings(sender, data):
             tools.generateTool("temp/temp_file.png")
             enable_item(item="Generate")
             set_item_label(item="Generate", label="Generate")
+            tools.runModelEditor("temp/temp_file.png")
         elif "Image" == get_value(item="Generation method"):
             temp_image_path = get_value("##imagePath")
             if temp_image_path != "Please select an image.":
@@ -169,6 +170,7 @@ def apply_settings(sender, data):
                 tools.generateTool(temp_image_path)
                 enable_item(item="Generate")
                 set_item_label(item="Generate", label="Generate")
+                tools.runModelEditor(temp_image_path)
             else:
                 pass
 
@@ -217,6 +219,7 @@ def tool_callbacks(caller_button):
                                                             "click or hit escape key to end the line\n"
                                                             "tool.")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="straight line tool"))
@@ -263,6 +266,7 @@ def tool_callbacks(caller_button):
                                                        "then the polyline will close when the\n"
                                                        "tool is terminated")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="polyline tool"))
@@ -299,6 +303,7 @@ def tool_callbacks(caller_button):
         curve_specifications.add_instructions(
             value="Left click on the drawing pad.\n")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="curve tool"),
@@ -346,6 +351,7 @@ def tool_callbacks(caller_button):
                   "to undo the drawn line"
         )
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="eraser tool"),
@@ -392,6 +398,7 @@ def tool_callbacks(caller_button):
                   "to undo the drawn line"
         )
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="doodle tool"),
@@ -419,6 +426,7 @@ def tool_callbacks(caller_button):
 
         skeleton_specifications.add_instructions(value="skeleton test")
 
+        set_item_label(item="Apply", label="Reset")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="skeleton tool"),
@@ -474,6 +482,7 @@ def tool_callbacks(caller_button):
                                                         "the second point. Right click or hit\n"
                                                         "escape key to end the tool")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="rectangle tool"))
@@ -517,6 +526,7 @@ def tool_callbacks(caller_button):
                                                      "the radius. Right click or hit\n"
                                                      "escape key to end the tool")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="circle tool"))
@@ -565,6 +575,8 @@ def tool_callbacks(caller_button):
                   "bezier curve\" then the bezier \n"
                   "curve will close when the third \n"
                   "point is selected")
+
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bezier tool"),
@@ -622,6 +634,7 @@ def tool_callbacks(caller_button):
                                                     "image to fix the aspect ratio of \n"
                                                     "the image.")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="image tool"),
@@ -642,6 +655,7 @@ def tool_callbacks(caller_button):
 
         bbw_specifications.add_instructions(value="bbw test")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bbw tool"),
@@ -703,6 +717,7 @@ def tool_callbacks(caller_button):
 
         generate_specifications.add_instructions(value="\tSelect a way to generate.")
 
+        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Generate",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="generate tool"),
@@ -924,21 +939,21 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[17][0], height=data[17][1], default_value=data[17][3], tag="bbw template texture")
     add_static_texture(width=data[18][0], height=data[18][1], default_value=data[18][3], tag="eraser tool texture")
     add_static_texture(width=data[19][0], height=data[19][1], default_value=data[19][3], tag="skeleton tool texture")
-    add_static_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="big arm left")
-    add_static_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="big arm right")
-    add_static_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="calf left")
-    add_static_texture(width=data[23][0], height=data[23][1], default_value=data[23][3], tag="calf right")
-    add_static_texture(width=data[24][0], height=data[24][1], default_value=data[24][3], tag="foot left")
-    add_static_texture(width=data[25][0], height=data[25][1], default_value=data[25][3], tag="foot right")
-    add_static_texture(width=data[26][0], height=data[26][1], default_value=data[26][3], tag="forearm left")
-    add_static_texture(width=data[27][0], height=data[27][1], default_value=data[27][3], tag="forearm right")
-    add_static_texture(width=data[28][0], height=data[28][1], default_value=data[28][3], tag="head")
-    add_static_texture(width=data[29][0], height=data[29][1], default_value=data[29][3], tag="hip")
-    add_static_texture(width=data[30][0], height=data[30][1], default_value=data[30][3], tag="palm left")
-    add_static_texture(width=data[31][0], height=data[31][1], default_value=data[31][3], tag="palm right")
-    add_static_texture(width=data[32][0], height=data[32][1], default_value=data[32][3], tag="thigh left")
-    add_static_texture(width=data[33][0], height=data[33][1], default_value=data[33][3], tag="thigh right")
-    add_static_texture(width=data[34][0], height=data[34][1], default_value=data[34][3], tag="upper bofy")
+    add_static_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="body 3 texture")
+    add_static_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="body 4 texture")
+    add_static_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="body 11 texture")
+    add_static_texture(width=data[23][0], height=data[23][1], default_value=data[23][3], tag="body 12 texture")
+    add_static_texture(width=data[24][0], height=data[24][1], default_value=data[24][3], tag="body 13 texture")
+    add_static_texture(width=data[25][0], height=data[25][1], default_value=data[25][3], tag="body 14 texture")
+    add_static_texture(width=data[26][0], height=data[26][1], default_value=data[26][3], tag="body 5 texture")
+    add_static_texture(width=data[27][0], height=data[27][1], default_value=data[27][3], tag="body 6 texture")
+    add_static_texture(width=data[28][0], height=data[28][1], default_value=data[28][3], tag="body 1 texture")
+    add_static_texture(width=data[29][0], height=data[29][1], default_value=data[29][3], tag="body 2 texture")
+    add_static_texture(width=data[30][0], height=data[30][1], default_value=data[30][3], tag="body 7 texture")
+    add_static_texture(width=data[31][0], height=data[31][1], default_value=data[31][3], tag="body 8 texture")
+    add_static_texture(width=data[32][0], height=data[32][1], default_value=data[32][3], tag="body 9 texture")
+    add_static_texture(width=data[33][0], height=data[33][1], default_value=data[33][3], tag="body 10 texture")
+    add_static_texture(width=data[34][0], height=data[34][1], default_value=data[34][3], tag="body 0 texture")
 
 
 with handler_registry(show=True, tag="global handler"):
@@ -953,7 +968,9 @@ with handler_registry(show=True, tag="mouse handler"):
 create_viewport(
     title="Sketch2Pose",
     width=1600,
-    height=870,
+    height=970,
+    x_pos=20,
+    y_pos=20,
     min_width=1000,
     min_height=600,
     small_icon="icons/sp.ico",
