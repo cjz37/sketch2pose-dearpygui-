@@ -13,7 +13,8 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 import torchgeometry
-from tqdm.tk import tqdm
+import tqdm
+# from tqdm.tk import tqdm
 import trimesh
 from skimage import measure
 from torch.utils.tensorboard.writer import SummaryWriter
@@ -564,8 +565,8 @@ def optimize(
 
     mean_zfoot_val = {}
     # show GUI
-    with tqdm(range(n_steps)) as pbar:
-    # with tqdm.trange(n_steps) as pbar:
+    # with tqdm(range(n_steps)) as pbar:
+    with tqdm.trange(n_steps) as pbar:
         for i in pbar:
             global_step = i + i_ini
             optimizer.zero_grad()
@@ -824,8 +825,8 @@ def optimize_ft(
     global_step = i_ini
 
     # show GUI
-    with tqdm(range(n_steps)) as pbar:
-    # with tqdm.trange(n_steps) as pbar:
+    # with tqdm(range(n_steps)) as pbar:
+    with tqdm.trange(n_steps) as pbar:
         for i in pbar:
             global_step = i + i_ini
             optimizer.zero_grad()

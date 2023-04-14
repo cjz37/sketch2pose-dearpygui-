@@ -21,6 +21,32 @@ def vectorHalf(v):
     return [v[0] / 2, v[1] / 2]
 
 
+def draw_body(i, center, point_radius, point_color, first_point, second_point, pad_name):
+    draw_image(
+        texture_tag=f"body {i} texture",
+        pmin=first_point,
+        pmax=second_point,
+        parent=pad_name,
+        tag=f"body {i}",
+    )
+    draw_circle(
+        center=center,
+        radius=point_radius,
+        tag=f"control point {i}",
+        color=point_color,
+        fill=point_color,
+        parent=pad_name,
+    )
+    draw_text(
+        pos=vectorSub(center, [5, 10]),
+        text=f"{i}",
+        size=20,
+        color=[20, 20, 20],
+        tag=f"point label {i}",
+        parent=pad_name
+    )
+
+
 def initPad(pad_name, control_points_sum, control_points, point_radius, point_color, body_width):
     tools.resetPad(pad_name)
 
@@ -29,29 +55,7 @@ def initPad(pad_name, control_points_sum, control_points, point_radius, point_co
         first_point = vectorSub(center, vectorHalf(body_width[i]))
         second_point = vectorAdd(center, vectorHalf(body_width[i]))
 
-        draw_image(
-            texture_tag=f"body {i} texture",
-            pmin=first_point,
-            pmax=second_point,
-            parent=pad_name,
-            tag=f"body {i}",
-        )
-        draw_circle(
-            center=center,
-            radius=point_radius,
-            tag=f"control point {i}",
-            color=point_color,
-            fill=point_color,
-            parent=pad_name,
-        )
-        draw_text(
-            pos=vectorSub(center, [5, 10]),
-            text=f"{i}",
-            size=20,
-            color=[20, 20, 20],
-            tag=f"point label {i}",
-            parent=pad_name
-        )
+        draw_body(i, center, point_radius, point_color, first_point, second_point, pad_name)
 
 
 def skeletonTool(pad_name):
@@ -117,29 +121,7 @@ def skeletonTool(pad_name):
                         first_point = vectorSub(current_mouse_pos, vectorHalf(body_width[i]))
                         second_point = vectorAdd(current_mouse_pos, vectorHalf(body_width[i]))
 
-                        draw_image(
-                            texture_tag=f"body {i} texture",
-                            pmin=first_point,
-                            pmax=second_point,
-                            parent=pad_name,
-                            tag=f"body {i}",
-                        )
-                        draw_circle(
-                            center=current_mouse_pos,
-                            radius=point_radius,
-                            tag=f"control point {i}",
-                            color=point_color,
-                            fill=point_color,
-                            parent=pad_name,
-                        )
-                        draw_text(
-                            pos=vectorSub(current_mouse_pos, [5, 10]),
-                            text=f"{i}",
-                            size=20,
-                            color=[20, 20, 20],
-                            tag=f"point label {i}",
-                            parent=pad_name
-                        )
+                        draw_body(i, current_mouse_pos, point_radius, point_color, first_point, second_point, pad_name)
 
                     control_points[i] = current_mouse_pos
 

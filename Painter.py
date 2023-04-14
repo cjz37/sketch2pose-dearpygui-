@@ -146,8 +146,8 @@ def apply_settings(sender, data):
         else:
             pass
 
-    if data == 'bbw tool':
-        tools.bbwTool("Pad")
+    # if data == 'bbw tool':
+    #     tools.bbwTool("Pad")
 
     if data == 'skeleton tool':
         tools.skeletonTool("Pad")
@@ -155,11 +155,10 @@ def apply_settings(sender, data):
     if data == 'generate tool':
         if "Canvas" == get_value(item="Generation method"):
             print("generating from canvas ... ...")
-            disable_item(item="Generate")
-            set_item_label(item="Generate", label="Generating")
+            tools.autoSaveTool()
+            configure_item(item="loading popup", show=True)
             tools.generateTool("temp/temp_file.png")
-            enable_item(item="Generate")
-            set_item_label(item="Generate", label="Generate")
+            configure_item(item="loading popup", show=False)
             tools.runModelEditor("temp/temp_file.png")
         elif "Image" == get_value(item="Generation method"):
             temp_image_path = get_value("##imagePath")
@@ -205,11 +204,12 @@ def tool_callbacks(caller_button):
         straight_line_specifications = ToolSpec(
             title="        Straight Line Tool Properties", height=60)
 
-        add_input_int(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
             min_value=1,
+            max_value=20,
             width=145,
             parent="tool properties"
         )
@@ -238,11 +238,12 @@ def tool_callbacks(caller_button):
         polyline_specifications = ToolSpec(
             title="            Polyline Tool Properties", height=100)
 
-        add_input_int(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
             min_value=1,
+            max_value=20,
             width=145,
             parent="tool properties"
         )
@@ -286,14 +287,12 @@ def tool_callbacks(caller_button):
             height=60,
         )
 
-        add_input_int(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
             min_value=1,
-            min_clamped=True,
             max_value=20,
-            max_clamped=True,
             width=145,
             parent="tool properties",
         )
@@ -329,16 +328,13 @@ def tool_callbacks(caller_button):
             height=60,
         )
 
-        add_input_int(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=20,
             min_value=20,
-            min_clamped=True,
             max_value=60,
-            max_clamped=True,
             width=145,
-            step=5,
             parent="tool properties",
         )
 
@@ -377,14 +373,12 @@ def tool_callbacks(caller_button):
             height=60,
         )
 
-        add_input_int(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
             min_value=1,
-            min_clamped=True,
             max_value=20,
-            max_clamped=True,
             width=145,
             parent="tool properties",
         )
@@ -447,14 +441,14 @@ def tool_callbacks(caller_button):
             height=175
         )
 
-        add_input_float(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
-            step=1,
             min_value=1,
+            max_value=20,
             width=145,
-            parent="tool properties"
+            parent="tool properties",
         )
         rectangle_specifications.add_space(height=2)
         add_input_float(
@@ -501,12 +495,12 @@ def tool_callbacks(caller_button):
         circle_specifications = ToolSpec(
             title="            Circle Tool Properties", height=135)
 
-        add_input_float(
+        add_slider_int(
             tag="Thickness",
             label="Thickness",
             default_value=2,
-            step=1,
             min_value=1,
+            max_value=20,
             width=145,
             parent="tool properties"
         )
@@ -545,15 +539,13 @@ def tool_callbacks(caller_button):
             title="           Bezier Tool Properties",
             height=100,
         )
-        add_input_int(
+        add_slider_int(
             tag="Thickness", 
             label="Thickness", 
             default_value=2, 
             min_value=1,
-            min_clamped=True,
             max_value=20,
-            max_clamped=True,
-            width=145, 
+            width=145,
             parent="tool properties",
         )
         bezier_specifications.add_space(height=2)
@@ -644,28 +636,28 @@ def tool_callbacks(caller_button):
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
 
-    elif "bbw tool" == caller_button:
-        print("\nbbw tool\n-------")
-
-        delete_item("Tool Specifications", children_only=True)
-        bbw_specifications = ToolSpec(
-            title="           BBW Tool Properties",
-            height=60
-        )
-
-        bbw_specifications.add_instructions(value="bbw test")
-
-        set_item_label(item="Apply", label="Apply")
-        set_item_callback(
-            item="Apply",
-            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bbw tool"),
-        )
-        set_item_callback(
-            item="Cancel",
-            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
-        )
-
-        tools.bbwTool(pad_name="Pad")
+    # elif "bbw tool" == caller_button:
+    #     print("\nbbw tool\n-------")
+    #
+    #     delete_item("Tool Specifications", children_only=True)
+    #     bbw_specifications = ToolSpec(
+    #         title="           BBW Tool Properties",
+    #         height=60
+    #     )
+    #
+    #     bbw_specifications.add_instructions(value="bbw test")
+    #
+    #     set_item_label(item="Apply", label="Apply")
+    #     set_item_callback(
+    #         item="Apply",
+    #         callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bbw tool"),
+    #     )
+    #     set_item_callback(
+    #         item="Cancel",
+    #         callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
+    #     )
+    #
+    #     tools.bbwTool(pad_name="Pad")
     
     elif "generate tool" == caller_button:
         print("\ngenerate tool\n-------")
@@ -717,7 +709,6 @@ def tool_callbacks(caller_button):
 
         generate_specifications.add_instructions(value="\tSelect a way to generate.")
 
-        set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Generate",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="generate tool"),
@@ -1100,6 +1091,15 @@ with window(
     )
     add_spacer()
     add_image_button(
+        tag="image tool",
+        texture_tag="image tool texture",
+        width=img_size,
+        height=img_size,
+        frame_padding=img_padding,
+        callback=tool_callback_dispatcher
+    )
+    add_spacer()
+    add_image_button(
         tag="straight line tool",
         texture_tag="straight line tool texture",
         width=img_size,
@@ -1152,33 +1152,24 @@ with window(
         frame_padding=img_padding,
         callback=tool_callback_dispatcher
     )
-    add_spacer()
-    add_image_button(
-        tag="image tool",
-        texture_tag="image tool texture",
-        width=img_size,
-        height=img_size,
-        frame_padding=img_padding,
-        callback=tool_callback_dispatcher
-    )
-    add_spacer()
-    add_image_button(
-        tag="bbw tool",
-        texture_tag="bbw tool texture",
-        width=img_size,
-        height=img_size,
-        frame_padding=img_padding,
-        callback=tool_callback_dispatcher
-    )
-    add_spacer()
-    add_image_button(
-        tag="color pickup tool",
-        texture_tag="color pickup tool texture",
-        width=img_size,
-        height=img_size,
-        frame_padding=img_padding,
-        callback=tool_callback_dispatcher
-    )
+    # add_spacer()
+    # add_image_button(
+    #     tag="bbw tool",
+    #     texture_tag="bbw tool texture",
+    #     width=img_size,
+    #     height=img_size,
+    #     frame_padding=img_padding,
+    #     callback=tool_callback_dispatcher
+    # )
+    # add_spacer()
+    # add_image_button(
+    #     tag="color pickup tool",
+    #     texture_tag="color pickup tool texture",
+    #     width=img_size,
+    #     height=img_size,
+    #     frame_padding=img_padding,
+    #     callback=tool_callback_dispatcher
+    # )
 
 bind_item_theme("Tools", "tools theme")
 
@@ -1248,7 +1239,21 @@ with popup(
             callback=tool_callback_dispatcher,
         )
 
+with window(
+    tag="loading popup",
+    modal=True,
+    show=False,
+    no_title_bar=True,
+    pos=[385, 75],
+    width=330,
+):
+    with group(horizontal=True, pos=[20, 20]):
+        add_text("The model is being generated,\nwhich will take approximately\none minute.")
+        add_spacer(width=6)
+        add_loading_indicator()
+
 bind_item_theme("reset popup", "popup theme")
+bind_item_theme("loading popup", "popup theme")
 
 # Color Selector
 with window(
@@ -1333,7 +1338,7 @@ with window(
     height=40,
     pos=[100, get_viewport_height() - 70],
 ):
-    add_text(tag="development info", default_value="Power by Dearpygui", pos=[70, 3])
+    add_text(tag="development info", default_value="Power by Dearpygui (1.8.0)", pos=[40, 3])
 
 bind_item_theme("Sys info", "foot bar theme")
 

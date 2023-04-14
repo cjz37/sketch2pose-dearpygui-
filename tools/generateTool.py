@@ -27,7 +27,5 @@ def generate(image_path):
     create_generation_cmd(image_path)
     print('Create generate.bat')
 
-    tools.autoSaveTool()
-
     os.system('generate.bat')
     print('The model has been successfully generated!')
