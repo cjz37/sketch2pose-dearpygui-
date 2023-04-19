@@ -164,11 +164,9 @@ def apply_settings(sender, data):
             temp_image_path = get_value("##imagePath")
             if temp_image_path != "Please select an image.":
                 print("generating from image ... ...")
-                disable_item(item="Generate")
-                set_item_label(item="Generate", label="Generating")
+                configure_item(item="loading popup", show=True)
                 tools.generateTool(temp_image_path)
-                enable_item(item="Generate")
-                set_item_label(item="Generate", label="Generate")
+                configure_item(item="loading popup", show=False)
                 tools.runModelEditor(temp_image_path)
             else:
                 pass
@@ -416,6 +414,16 @@ def tool_callbacks(caller_button):
         skeleton_specifications = ToolSpec(
             title="            Skeleton Tool Properties",
             height=60,
+        )
+
+        add_slider_int(
+            tag="Rotate",
+            label="Rotate",
+            default_value=0,
+            min_value=-180,
+            max_value=180,
+            width=145,
+            parent="tool properties"
         )
 
         skeleton_specifications.add_instructions(value="skeleton test")
@@ -879,6 +887,7 @@ data.append(load_image("icons/bbw-tool.png"))  # 16
 data.append(load_image("data/images/smpl.png"))
 data.append(load_image("icons/eraser-tool.png"))
 data.append(load_image("icons/skeleton-tool.png"))
+
 data.append(load_image("data/body/big-arm-left.png"))   # 20
 data.append(load_image("data/body/big-arm-right.png"))
 data.append(load_image("data/body/calf-left.png"))
@@ -930,6 +939,7 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[17][0], height=data[17][1], default_value=data[17][3], tag="bbw template texture")
     add_static_texture(width=data[18][0], height=data[18][1], default_value=data[18][3], tag="eraser tool texture")
     add_static_texture(width=data[19][0], height=data[19][1], default_value=data[19][3], tag="skeleton tool texture")
+
     add_static_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="body 3 texture")
     add_static_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="body 4 texture")
     add_static_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="body 11 texture")
@@ -950,6 +960,7 @@ with texture_registry(show=False, tag="global texture"):
 with handler_registry(show=True, tag="global handler"):
     add_mouse_move_handler(callback=pad_mouse_coordinates)
     add_key_down_handler(callback=tools.hotkeyCommands)
+    add_mouse_drag_handler(button=mvMouseButton_Right, tag="mr_drag")
     
 with handler_registry(show=True, tag="mouse handler"):
     add_mouse_release_handler(button=mvMouseButton_Left, tag="ml_release")
