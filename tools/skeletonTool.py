@@ -35,7 +35,7 @@ def update_texture(i):
 
 def rotate(i, angle):
     global body_imgs
-    rotated = imutils.rotate_bound(body_imgs[i], angle)
+    rotated = imutils.rotate(body_imgs[i], angle)
     cv2.imwrite(f"./data/body/temp/body_{i}.png", rotated)
     update_texture(i)
 
@@ -136,7 +136,7 @@ def skeletonTool(pad_name):
     control_points_sum = 15
     point_radius = 10
     point_color = [255, 255, 255]
-    body_width = [[174, 213], [109, 112], [132, 145], [152, 41], [152, 41], [138, 43], [138, 43], [67, 73], [67, 73], [62, 218], [62, 218], [58, 237], [58, 237], [52, 67], [52, 67]]
+    body_width = [[213, 213], [112, 112], [190, 190], [152, 152], [152, 152], [138, 138], [138, 138], [95, 95], [95, 95], [218, 218], [218, 218], [237, 237], [237, 237], [67, 67], [67, 67]]
     control_points = [[618.0, 261.0], [618.0, 117.0], [618.0, 365.0], [485.0, 213.0], [751.0, 213.0], [377.0, 210.0], [866.0, 210.0], [302.0, 182.0], [943.0, 182.0], [581.0, 489.0], [654.0, 489.0], [574.0, 669.0], [661.0, 669.0], [579.0, 785.0], [656.0, 785.0]]
     initPad(pad_name, control_points_sum, control_points, point_radius, point_color, body_width)
 
@@ -144,8 +144,6 @@ def skeletonTool(pad_name):
         current_mouse_pos = get_drawing_mouse_pos()
 
         if is_mouse_button_down(mvMouseButton_Right):
-
-            print(angle)
 
             if get_active_window() != "Drawing Pad":
                 break
@@ -157,17 +155,17 @@ def skeletonTool(pad_name):
                     while not isMouseButtonLeftReleased():
                         time.sleep(0.02)
 
-                        rotate(i, angle)
+                        rotate(i, -angle)
 
                         delete_item(f"body {i}")
                         delete_item(f"control point {i}")
                         delete_item(f"point label {i}")
-                        #
-                        current_mouse_pos = get_drawing_mouse_pos()
-                        first_point = vectorSub(current_mouse_pos, vectorHalf(body_width[i]))
-                        second_point = vectorAdd(current_mouse_pos, vectorHalf(body_width[i]))
 
-                        draw_body(i, current_mouse_pos, point_radius, point_color, first_point, second_point, pad_name)
+                        center = control_points[i]
+                        first_point = vectorSub(center, vectorHalf(body_width[i]))
+                        second_point = vectorAdd(center, vectorHalf(body_width[i]))
+
+                        draw_body(i, center, point_radius, point_color, first_point, second_point, pad_name)
 
                     control_points[i] = current_mouse_pos
 

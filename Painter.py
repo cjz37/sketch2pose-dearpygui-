@@ -96,6 +96,55 @@ def pad_mouse_coordinates():
     # )
 
 
+def clean_up_temp_files():
+    folder_path = "./data/body/temp"
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print(f"Failed to delete {file_path}. Reason: {e}")
+
+
+def init_body_texture():
+    clean_up_temp_files()
+    init_data = list()
+    init_data.append(load_image("data/body/big-arm-left.png"))
+    init_data.append(load_image("data/body/big-arm-right.png"))
+    init_data.append(load_image("data/body/calf-left.png"))
+    init_data.append(load_image("data/body/calf-right.png"))
+    init_data.append(load_image("data/body/foot-left.png"))
+    init_data.append(load_image("data/body/foot-right.png"))
+    init_data.append(load_image("data/body/forearm-left.png"))
+    init_data.append(load_image("data/body/forearm-right.png"))
+    init_data.append(load_image("data/body/head.png"))
+    init_data.append(load_image("data/body/hip.png"))
+    init_data.append(load_image("data/body/palm-left.png"))
+    init_data.append(load_image("data/body/palm-right.png"))
+    init_data.append(load_image("data/body/thigh-left.png"))
+    init_data.append(load_image("data/body/thigh-right.png"))
+    init_data.append(load_image("data/body/upper-body.png"))
+
+    set_value("body 3 texture", init_data[0][3])
+    set_value("body 4 texture", init_data[1][3])
+    set_value("body 11 texture", init_data[2][3])
+    set_value("body 12 texture", init_data[3][3])
+    set_value("body 13 texture", init_data[4][3])
+    set_value("body 14 texture", init_data[5][3])
+    set_value("body 5 texture", init_data[6][3])
+    set_value("body 6 texture", init_data[7][3])
+    set_value("body 1 texture", init_data[8][3])
+    set_value("body 2 texture", init_data[9][3])
+    set_value("body 7 texture", init_data[10][3])
+    set_value("body 8 texture", init_data[11][3])
+    set_value("body 9 texture", init_data[12][3])
+    set_value("body 10 texture", init_data[13][3])
+    set_value("body 0 texture", init_data[14][3])
+
+
 def apply_settings(sender, data):
     if data == "cancel tool":
         delete_item("Tool Specifications", children_only=True)
@@ -146,10 +195,8 @@ def apply_settings(sender, data):
         else:
             pass
 
-    # if data == 'bbw tool':
-    #     tools.bbwTool("Pad")
-
     if data == 'skeleton tool':
+        init_body_texture()
         tools.skeletonTool("Pad")
 
     if data == 'generate tool':
@@ -188,6 +235,7 @@ def tool_callbacks(caller_button):
 
     elif "Yes##reset" == caller_button:
         configure_item("reset popup", show=False)
+        init_body_texture()
         delete_item("Tool Specifications", children_only=True)
         add_text(
             default_value="To get started, please select one of\nthe tools from the column on the\nleft.",
@@ -409,21 +457,12 @@ def tool_callbacks(caller_button):
 
     elif "skeleton tool" == caller_button:
         print("\nskeleton tool\n-------")
+        init_body_texture()
         delete_item("Tool Specifications", children_only=True)
 
         skeleton_specifications = ToolSpec(
             title="            Skeleton Tool Properties",
             height=60,
-        )
-
-        add_slider_int(
-            tag="Rotate",
-            label="Rotate",
-            default_value=0,
-            min_value=-180,
-            max_value=180,
-            width=145,
-            parent="tool properties"
         )
 
         skeleton_specifications.add_instructions(value="skeleton test")
@@ -940,21 +979,21 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[18][0], height=data[18][1], default_value=data[18][3], tag="eraser tool texture")
     add_static_texture(width=data[19][0], height=data[19][1], default_value=data[19][3], tag="skeleton tool texture")
 
-    add_static_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="body 3 texture")
-    add_static_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="body 4 texture")
-    add_static_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="body 11 texture")
-    add_static_texture(width=data[23][0], height=data[23][1], default_value=data[23][3], tag="body 12 texture")
-    add_static_texture(width=data[24][0], height=data[24][1], default_value=data[24][3], tag="body 13 texture")
-    add_static_texture(width=data[25][0], height=data[25][1], default_value=data[25][3], tag="body 14 texture")
-    add_static_texture(width=data[26][0], height=data[26][1], default_value=data[26][3], tag="body 5 texture")
-    add_static_texture(width=data[27][0], height=data[27][1], default_value=data[27][3], tag="body 6 texture")
-    add_static_texture(width=data[28][0], height=data[28][1], default_value=data[28][3], tag="body 1 texture")
-    add_static_texture(width=data[29][0], height=data[29][1], default_value=data[29][3], tag="body 2 texture")
-    add_static_texture(width=data[30][0], height=data[30][1], default_value=data[30][3], tag="body 7 texture")
-    add_static_texture(width=data[31][0], height=data[31][1], default_value=data[31][3], tag="body 8 texture")
-    add_static_texture(width=data[32][0], height=data[32][1], default_value=data[32][3], tag="body 9 texture")
-    add_static_texture(width=data[33][0], height=data[33][1], default_value=data[33][3], tag="body 10 texture")
-    add_static_texture(width=data[34][0], height=data[34][1], default_value=data[34][3], tag="body 0 texture")
+    add_dynamic_texture(width=data[20][0], height=data[20][1], default_value=data[20][3], tag="body 3 texture")
+    add_dynamic_texture(width=data[21][0], height=data[21][1], default_value=data[21][3], tag="body 4 texture")
+    add_dynamic_texture(width=data[22][0], height=data[22][1], default_value=data[22][3], tag="body 11 texture")
+    add_dynamic_texture(width=data[23][0], height=data[23][1], default_value=data[23][3], tag="body 12 texture")
+    add_dynamic_texture(width=data[24][0], height=data[24][1], default_value=data[24][3], tag="body 13 texture")
+    add_dynamic_texture(width=data[25][0], height=data[25][1], default_value=data[25][3], tag="body 14 texture")
+    add_dynamic_texture(width=data[26][0], height=data[26][1], default_value=data[26][3], tag="body 5 texture")
+    add_dynamic_texture(width=data[27][0], height=data[27][1], default_value=data[27][3], tag="body 6 texture")
+    add_dynamic_texture(width=data[28][0], height=data[28][1], default_value=data[28][3], tag="body 1 texture")
+    add_dynamic_texture(width=data[29][0], height=data[29][1], default_value=data[29][3], tag="body 2 texture")
+    add_dynamic_texture(width=data[30][0], height=data[30][1], default_value=data[30][3], tag="body 7 texture")
+    add_dynamic_texture(width=data[31][0], height=data[31][1], default_value=data[31][3], tag="body 8 texture")
+    add_dynamic_texture(width=data[32][0], height=data[32][1], default_value=data[32][3], tag="body 9 texture")
+    add_dynamic_texture(width=data[33][0], height=data[33][1], default_value=data[33][3], tag="body 10 texture")
+    add_dynamic_texture(width=data[34][0], height=data[34][1], default_value=data[34][3], tag="body 0 texture")
 
 
 with handler_registry(show=True, tag="global handler"):
