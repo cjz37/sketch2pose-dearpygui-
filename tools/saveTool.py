@@ -12,16 +12,13 @@ from db_manage import saveDatabase
 
 from dearpygui.dearpygui import *
 
-file_path = ''
+# file_path = ''
 
 
 def saveTool():
-    global file_path
 
-    delete_item("cursor circle")
-    delete_item("cursor node")
-
-    Tk().withdraw()
+    # Tk().withdraw()
+    # Tk().mainloop()
 
     hwnd = win32gui.FindWindow(None, "Sketch2Pose")
     win32gui.SetForegroundWindow(hwnd)
@@ -38,8 +35,6 @@ def saveTool():
                                   defaultextension=[("JPEG (*.jpg, *.jpeg)", "*.jpg"), ("PNG (*.png)", "*.png"),
                                                     ("Sketch2Pose File (*.db)", "*.sdw")])
 
-    win32gui.SetForegroundWindow(hwnd)
-
     if file_path:
 
         if file_path[-3:] == ".db":
@@ -53,12 +48,8 @@ def saveTool():
 
 
 def autoSaveTool():
-    global file_path
 
-    delete_item("cursor circle")
-    delete_item("cursor node")
-
-    Tk().withdraw()
+    # Tk().withdraw()
 
     hwnd = win32gui.FindWindow(None, "Sketch2Pose")
     win32gui.SetForegroundWindow(hwnd)
@@ -68,8 +59,6 @@ def autoSaveTool():
     x1, y1 = win32gui.ClientToScreen(hwnd, (x1 - x, y1 - y))
     im = pyautogui.screenshot(region=(x, y, x1, y1))
 
-    win32gui.SetForegroundWindow(hwnd)
-
     file_path = os.getcwd() + "\\temp\\temp_file.png"
 
     if file_path:
@@ -77,3 +66,5 @@ def autoSaveTool():
         im = Image.open(file_path)
         im = im.crop((360, 50, get_viewport_width() - 16, get_viewport_height() - 70))
         im.save(file_path)
+    else:
+        pass

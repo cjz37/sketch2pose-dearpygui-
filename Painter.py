@@ -682,29 +682,6 @@ def tool_callbacks(caller_button):
             item="Cancel",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
-
-    # elif "bbw tool" == caller_button:
-    #     print("\nbbw tool\n-------")
-    #
-    #     delete_item("Tool Specifications", children_only=True)
-    #     bbw_specifications = ToolSpec(
-    #         title="           BBW Tool Properties",
-    #         height=60
-    #     )
-    #
-    #     bbw_specifications.add_instructions(value="bbw test")
-    #
-    #     set_item_label(item="Apply", label="Apply")
-    #     set_item_callback(
-    #         item="Apply",
-    #         callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="bbw tool"),
-    #     )
-    #     set_item_callback(
-    #         item="Cancel",
-    #         callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
-    #     )
-    #
-    #     tools.bbwTool(pad_name="Pad")
     
     elif "generate tool" == caller_button:
         print("\ngenerate tool\n-------")
@@ -1095,7 +1072,7 @@ with viewport_menu_bar(tag="menu bar"):
     with menu(label="Help", tag="menu help"):
         add_menu_item(
             label="Github",
-            callback=lambda: open_website(sender=None, data="https://github.com/cjz37/sketch2pose-dearpygui"),
+            callback=lambda: open_website(sender=None, data="https://github.com/cjz37/sketch2pose-dearpygui-"),
         )
 
 # Tools bar

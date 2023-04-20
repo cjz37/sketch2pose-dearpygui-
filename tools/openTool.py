@@ -13,16 +13,13 @@ file_path = ''
 def openTool():
     global file_path
 
-    delete_draw_command("Pad", "cursorX")
-    delete_draw_command("Pad", "cursorY")
-
     Tk().withdraw()
 
-    hwnd = win32gui.FindWindow(None, "SimpleDrawing")
+    hwnd = win32gui.FindWindow(None, "Sketch2Pose")
 
-    file_path = askopenfilename(title="SimpleDrawing open drawing window",
-                                filetypes=[("SimpleDrawing File (*.db)", "*.db")],
-                                defaultextension=[("SimpleDrawing File (*.db)", "*.db")])
+    file_path = askopenfilename(title="Sketch2Pose open drawing window",
+                                filetypes=[("Sketch2Pose File (*.db)", "*.db")],
+                                defaultextension=[("Sketch2Pose File (*.db)", "*.db")])
 
     win32gui.SetForegroundWindow(hwnd)
 
