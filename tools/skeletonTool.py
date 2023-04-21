@@ -29,8 +29,6 @@ body_imgs = [body_0_img, body_1_img, body_2_img, body_3_img, body_4_img, body_5_
 def update_texture(i):
     data = load_image(f"./data/body/temp/body_{i}.png")
     set_value(f"body {i} texture", data[3])
-    # delete_item(f"body {i} texture")
-    # add_static_texture(width=data[0], height=data[1], default_value=data[3], tag=f"body {i} texture", parent="global texture")
 
 
 def rotate(i, angle):
@@ -141,6 +139,7 @@ def skeletonTool(pad_name):
     initPad(pad_name, control_points_sum, control_points, point_radius, point_color, body_width)
 
     while True:
+
         current_mouse_pos = get_drawing_mouse_pos()
 
         if is_mouse_button_down(mvMouseButton_Right):
@@ -152,7 +151,7 @@ def skeletonTool(pad_name):
 
                 if check(control_points[i], current_mouse_pos, point_radius):
 
-                    while not isMouseButtonLeftReleased():
+                    while not isMouseButtonRightReleased():
                         time.sleep(0.02)
 
                         rotate(i, -angle)
@@ -167,10 +166,9 @@ def skeletonTool(pad_name):
 
                         draw_body(i, center, point_radius, point_color, first_point, second_point, pad_name)
 
-                    control_points[i] = current_mouse_pos
+                    # control_points[i] = current_mouse_pos
 
         if is_mouse_button_down(mvMouseButton_Left):
-            # current_mouse_pos = get_drawing_mouse_pos()
 
             if get_active_window() != "Drawing Pad":
                 break
