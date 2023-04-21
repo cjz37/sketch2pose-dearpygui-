@@ -237,6 +237,7 @@ def tool_callbacks(caller_button):
         configure_item("reset popup", show=False)
         init_body_texture()
         delete_item("Tool Specifications", children_only=True)
+        tools.joint_color = [155, 224, 229, 255]
         add_text(
             default_value="To get started, please select one of\nthe tools from the column on the\nleft.",
             parent="Tool Specifications",
@@ -461,11 +462,19 @@ def tool_callbacks(caller_button):
         delete_item("Tool Specifications", children_only=True)
 
         skeleton_specifications = ToolSpec(
-            title="            Skeleton Tool Properties",
+            title="          Skeleton Tool Properties",
             height=60,
         )
 
         skeleton_specifications.add_instructions(value="skeleton test")
+
+        add_checkbox(
+            tag="Show joints",
+            label="Show joints",
+            default_value=True,
+            parent="tool properties",
+            callback=tools.showJoints
+        )
 
         set_item_label(item="Apply", label="Reset")
         set_item_callback(
@@ -976,11 +985,12 @@ with texture_registry(show=False, tag="global texture"):
 with handler_registry(show=True, tag="global handler"):
     add_mouse_move_handler(callback=pad_mouse_coordinates)
     add_key_down_handler(callback=tools.hotkeyCommands)
-    add_mouse_drag_handler(button=mvMouseButton_Right, tag="mr_drag")
     
 with handler_registry(show=True, tag="mouse handler"):
     add_mouse_release_handler(button=mvMouseButton_Left, tag="ml_release")
     add_mouse_release_handler(button=mvMouseButton_Right, tag="mr_release")
+    add_mouse_drag_handler(button=mvMouseButton_Right, tag="mr_drag")
+    add_mouse_drag_handler(button=mvMouseButton_Left, tag="ml_drag")
 
 
 create_viewport(

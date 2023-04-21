@@ -39,3 +39,4 @@ from tools.runModelEditor import runModelEditor
 from tools.bbwTool import bbwTool
 
 from tools.skeletonTool import skeletonTool
+from tools.skeletonTool import showJoints
