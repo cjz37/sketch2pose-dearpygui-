@@ -109,7 +109,7 @@ def show_pkl(path):
     mesh.paint_uniform_color([0.2, 0.2, 0.2])
 
     print("Open 3D model")
-    o3d.visualization.draw([mesh], title='Model Viewer', width=1400, height=740)
+    o3d.visualization.draw([mesh], title='Model Viewer', width=800, height=850)
 
 
 if __name__ == "__main__":

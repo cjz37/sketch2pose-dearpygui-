@@ -407,6 +407,8 @@ def skeletonTool(pad_name):
         current_mouse_pos = get_drawing_mouse_pos()
 
         if is_mouse_button_down(mvMouseButton_Left):
+            angle = 0
+
             if get_active_window() != "Drawing Pad":
                 break
             for i in range(len(joints)):

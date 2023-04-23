@@ -1000,7 +1000,7 @@ create_viewport(
     x_pos=20,
     y_pos=20,
     min_width=1000,
-    min_height=600,
+    min_height=970,
     small_icon="icons/sp.ico",
     large_icon="icons/sp.ico",
     resizable=True,
@@ -1285,7 +1285,7 @@ with window(
     width=330,
 ):
     with group(horizontal=True, pos=[20, 20]):
-        add_text("The model is being generated,\nwhich will take approximately\none minute.")
+        add_text("The model is being generated,\nwhich will take approximately\n30 seconds.")
         add_spacer(width=6)
         add_loading_indicator()
 
