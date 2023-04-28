@@ -32,10 +32,6 @@ def show_pkl(path):
         thQuart = mesh.get_rotation_matrix_from_xyz(quart)
         mesh.rotate(thQuart)
 
-        # 另存为obj文件
-        # o3d.io.write_triangle_mesh("C:/Users/Crange/Desktop/output_files/output.obj", mesh)
-        # o3d.io.write_triangle_mesh("C:/Users/Crange/Desktop/output_files/output.ply", mesh)
-
         # mesh info
         # print(mesh)
         # print('Vertices:')
