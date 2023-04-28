@@ -17,7 +17,8 @@ from tools.polylineTool import polylineTool
 
 from tools.doodleTool import doodleTool
 
-from tools.curveTool import curveTool
+from tools.splineTool import splineTool
+from tools.splineTool import draw_spline_quadratic
 
 from tools.rectangleTool import rectangleTool
 from tools.rectangleTool import fillRectangleCheckbox
@@ -40,3 +41,5 @@ from tools.bbwTool import bbwTool
 
 from tools.skeletonTool import skeletonTool
 from tools.skeletonTool import showJoints
+
+from tools.exportTool import exportTool

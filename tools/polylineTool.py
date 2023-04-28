@@ -57,7 +57,7 @@ def polylineTool(pad_name, lineColor, lineThickness):
                 if is_key_down(mvKey_Shift):
                     angle = get_angle(mouse_position, point2)
 
-                    if angle>=0 and angle<=30:
+                    if (angle >= 0) and (angle <= 30):
                         point2 = [get_drawing_mouse_pos()[0], mouse_position[1]]
                         draw_line(
                             p1=mouse_position,
@@ -68,7 +68,7 @@ def polylineTool(pad_name, lineColor, lineThickness):
                             parent=pad_name
                         )
 
-                    elif angle>30 and angle<=60:
+                    elif (angle > 30) and (angle <= 60):
 
                         p2_Y = 0
 
@@ -94,7 +94,7 @@ def polylineTool(pad_name, lineColor, lineThickness):
                             parent=pad_name
                         )
 
-                    elif angle>60 and angle<=90:
+                    elif (angle > 60) and (angle <= 90):
                         point2 = [mouse_position[0], get_drawing_mouse_pos()[1]]
                         draw_line(
                             p1=mouse_position,
@@ -121,10 +121,9 @@ def polylineTool(pad_name, lineColor, lineThickness):
                 if isMouseButtonLeftReleased():
                     # If the user clicks outside the drawing pad, it is assumed that they want to terminate the tool
                     if get_active_window() != "Drawing Pad":
-                        # delete_draw_command(pad_name, f"polyLine {tools.polyline_count}")
                         delete_item(f"polyLine {tools.polyline_count}")
 
-                        if get_value("Close polyline") == True:
+                        if get_value("Close polyline"):
                             draw_line(
                                 p1=first_point,
                                 p2=mouse_position,
@@ -149,10 +148,9 @@ def polylineTool(pad_name, lineColor, lineThickness):
 
                 # Check if user wants to exit the line tool
                 if isMouseButtonRightReleased():
-                    # delete_draw_command(pad_name, f"polyLine {tools.polyline_count}")
                     delete_item(f"polyLine {tools.polyline_count}")
 
-                    if get_value("Close polyline") == True:
+                    if get_value("Close polyline"):
                         draw_line(
                             p1=first_point,
                             p2=mouse_position,
@@ -171,10 +169,9 @@ def polylineTool(pad_name, lineColor, lineThickness):
 
                 # Check if user wants to exit the line tool
                 if is_key_released(mvKey_Escape):
-                    # delete_draw_command(pad_name, f"polyLine {tools.polyline_count}")
                     delete_item(f"polyLine {tools.polyline_count}")
 
-                    if get_value("Close polyline") == True:
+                    if get_value("Close polyline"):
                         draw_line(
                             p1=first_point,
                             p2=mouse_position,
@@ -192,8 +189,8 @@ def polylineTool(pad_name, lineColor, lineThickness):
                     break
 
                 # Delete the line drawn and begin the process again till user clicks the second point or exits the tool
-                # delete_draw_command(pad_name, f"polyLine {tools.polyline_count}")
                 delete_item(f"polyLine {tools.polyline_count}")
+
 
 def get_angle(first_position, second_position):
 

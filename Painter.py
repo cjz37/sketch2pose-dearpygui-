@@ -165,8 +165,8 @@ def apply_settings(sender, data):
     if data == "doodle tool":
         tools.doodleTool("Pad", get_value("Color"), get_value("Thickness"))
 
-    if data == "curve tool":
-        tools.curveTool("Pad", get_value("Color"), get_value("Thickness"))
+    if data == "spline tool":
+        tools.splineTool("Pad", get_value("Color"), get_value("Thickness"))
 
     if data == "rectangle tool":
         if get_value("Fill rectangle"):
@@ -325,12 +325,12 @@ def tool_callbacks(caller_button):
         # Polyline main function call
         tools.polylineTool("Pad", get_value("Color"), get_value("Thickness"))
 
-    elif "curve tool" == caller_button:
-        print("\ncurve tool\n-------")
+    elif "spline tool" == caller_button:
+        print("\nspline tool\n-------")
         delete_item("Tool Specifications", children_only=True)
 
-        curve_specifications = ToolSpec(
-            title="           Curve Tool Properties",
+        spline_specifications = ToolSpec(
+            title="         Spline Tool Properties",
             height=60,
         )
 
@@ -344,23 +344,21 @@ def tool_callbacks(caller_button):
             parent="tool properties",
         )
 
-        curve_specifications.add_space(height=2)
-
-        curve_specifications.add_instructions(
+        spline_specifications.add_instructions(
             value="Left click on the drawing pad.\n")
 
         set_item_label(item="Apply", label="Apply")
         set_item_callback(
             item="Apply",
-            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="curve tool"),
+            callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="spline tool"),
         )
         set_item_callback(
             item="Cancel",
             callback=lambda: apply_settings_dispatcher(sender=None, app_data=None, user_data="cancel tool"),
         )
 
-        # Curve main function call
-        tools.curveTool(
+        # Spline main function call
+        tools.splineTool(
             pad_name="Pad",
             lineColor=get_value("Color"),
             lineThickness=get_value("Thickness")
@@ -466,7 +464,14 @@ def tool_callbacks(caller_button):
             height=60,
         )
 
-        skeleton_specifications.add_instructions(value="skeleton test")
+        skeleton_specifications.add_instructions(
+            value="Left click on the joints and drag the\n"
+                  "mouse to change the posture of\n"
+                  "human body. \n"
+                  "You can choose whether or not to\n"
+                  "show the control points of the\n"
+                  "joints."
+        )
 
         add_checkbox(
             tag="Show joints",
@@ -493,7 +498,7 @@ def tool_callbacks(caller_button):
         delete_item("Tool Specifications", children_only=True)
 
         rectangle_specifications = ToolSpec(
-            title="            Rectangle Tool Properties",
+            title="         Rectangle Tool Properties",
             height=175
         )
 
@@ -906,7 +911,7 @@ data.append(load_image("icons/canvas-color-tool.png"))
 data.append(load_image("icons/dark-generate-tool.png"))
 data.append(load_image("icons/dark-reset-tool.png"))  # 12
 data.append(load_image("icons/open-model-editor-tool.png"))
-data.append(load_image("icons/dark-curve-tool.png"))
+data.append(load_image("icons/dark-spline-tool.png"))
 data.append(load_image("icons/colorPickup-tool.png"))
 data.append(load_image("icons/bbw-tool.png"))  # 16
 data.append(load_image("data/images/smpl.png"))
@@ -958,7 +963,7 @@ with texture_registry(show=False, tag="global texture"):
     add_static_texture(width=data[11][0], height=data[11][1], default_value=data[11][3], tag="generate tool texture")
     add_static_texture(width=data[12][0], height=data[12][1], default_value=data[12][3], tag="reset tool texture")
     add_static_texture(width=data[13][0], height=data[13][1], default_value=data[13][3], tag="open model editor tool texture")
-    add_static_texture(width=data[14][0], height=data[14][1], default_value=data[14][3], tag="curve tool texture")
+    add_static_texture(width=data[14][0], height=data[14][1], default_value=data[14][3], tag="spline tool texture")
     add_static_texture(width=data[15][0], height=data[15][1], default_value=data[15][3], tag="color pickup tool texture")
     add_static_texture(width=data[16][0], height=data[16][1], default_value=data[16][3], tag="bbw tool texture")
     add_static_texture(width=data[17][0], height=data[17][1], default_value=data[17][3], tag="bbw template texture")
@@ -1022,6 +1027,11 @@ with viewport_menu_bar(tag="menu bar"):
             shortcut='Ctrl + S',
         )
         add_menu_item(
+            label="Export 3D model",
+            callback=tools.exportTool,
+        )
+        add_separator()
+        add_menu_item(
             label="Exit", 
             callback=lambda: stop_dearpygui()
         )
@@ -1040,20 +1050,32 @@ with viewport_menu_bar(tag="menu bar"):
 
     with menu(label="Tools", tag="menu tools"):
         add_menu_item(
-            label="Doodle tool",
+            label="Doodle",
             callback=lambda: tool_callback_dispatcher(sender="doodle tool")
         )
         add_menu_item(
-            label="Straight line tool", 
+            label="Eraser",
+            callback=lambda: tool_callback_dispatcher(sender="eraser tool")
+        )
+        add_menu_item(
+            label="Skeleton",
+            callback=lambda: tool_callback_dispatcher(sender="skeleton tool")
+        )
+        add_menu_item(
+            label="Add Image",
+            callback=lambda: tool_callback_dispatcher(sender="image tool")
+        )
+        add_menu_item(
+            label="Straight Line",
             callback=lambda: tool_callback_dispatcher(sender="straight line tool")
         )
         add_menu_item(
-            label="Polyline tool", 
+            label="Polyline",
             callback=lambda: tool_callback_dispatcher(sender="polyline tool")
         )
         add_menu_item(
-            label="Curve tool",
-            callback=lambda: tool_callback_dispatcher(sender="curve tool")
+            label="Spline",
+            callback=lambda: tool_callback_dispatcher(sender="spline tool")
         )
         add_menu_item(
             label="Rectangle tool", 
@@ -1067,17 +1089,22 @@ with viewport_menu_bar(tag="menu bar"):
             label="Bezier tool", 
             callback=lambda: tool_callback_dispatcher(sender="bezier tool")
         )
+        add_separator()
         add_menu_item(
-            label="Image tool", 
-            callback=lambda: tool_callback_dispatcher(sender="image tool")
+            label="Generation",
+            callback=lambda: tool_callback_dispatcher(sender="generate tool")
+        )
+        add_menu_item(
+            label="Model Viewer",
+            callback=lambda: tool_callback_dispatcher(sender="open model editor tool")
         )
     
-    with menu(label="Theme", tag="menu theme"):
-        add_menu_item(
-            label="Dark",
-            user_data="dark",
-            callback=theme_switcher,
-        )
+    # with menu(label="Theme", tag="menu theme"):
+    #     add_menu_item(
+    #         label="Dark",
+    #         user_data="dark",
+    #         callback=theme_switcher,
+    #     )
 
     with menu(label="Help", tag="menu help"):
         add_menu_item(
@@ -1155,8 +1182,8 @@ with window(
     )
     add_spacer()
     add_image_button(
-        tag="curve tool",
-        texture_tag="curve tool texture",
+        tag="spline tool",
+        texture_tag="spline tool texture",
         width=img_size,
         height=img_size,
         frame_padding=img_padding,
@@ -1189,24 +1216,6 @@ with window(
         frame_padding=img_padding,
         callback=tool_callback_dispatcher
     )
-    # add_spacer()
-    # add_image_button(
-    #     tag="bbw tool",
-    #     texture_tag="bbw tool texture",
-    #     width=img_size,
-    #     height=img_size,
-    #     frame_padding=img_padding,
-    #     callback=tool_callback_dispatcher
-    # )
-    # add_spacer()
-    # add_image_button(
-    #     tag="color pickup tool",
-    #     texture_tag="color pickup tool texture",
-    #     width=img_size,
-    #     height=img_size,
-    #     frame_padding=img_padding,
-    #     callback=tool_callback_dispatcher
-    # )
 
 bind_item_theme("Tools", "tools theme")
 

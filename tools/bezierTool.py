@@ -96,7 +96,7 @@ def bezierTool(pad_name, lineColor, lineThickness):
 
                             flag = 1
 
-                            if get_value("Close bezier curve") == True:
+                            if get_value("Close bezier curve"):
                                 draw_bezier_cubic(
                                     p1=bezier_points[0], 
                                     p2=bezier_points[1], 

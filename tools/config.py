@@ -8,4 +8,6 @@ bezier_count = 1
 text_count = 1
 image_count = 1
 spline_count = 1
+temp_count = 0
 joint_color = [155, 224, 229, 255]
+model_exit = True

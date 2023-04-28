@@ -57,7 +57,7 @@ def straightLineTool(pad_name, lineColor, lineThickness):
                 if is_key_down(mvKey_Shift):
                     angle = get_angle(mouse_position, point2)
 
-                    if angle>=0 and angle<=30:
+                    if (angle >= 0) and (angle <= 30):
                         point2 = [point2[0], mouse_position[1]]
                         draw_line(
                             parent=pad_name,
@@ -68,7 +68,7 @@ def straightLineTool(pad_name, lineColor, lineThickness):
                             tag=f"straightLine {tools.straight_line_count}"
                         )
 
-                    elif angle>30 and angle<=60:
+                    elif (angle > 30) and (angle <= 60):
 
                         p2_Y = 0
 
@@ -94,7 +94,7 @@ def straightLineTool(pad_name, lineColor, lineThickness):
                             tag=f"straightLine {tools.straight_line_count}"
                         )
 
-                    elif angle>60 and angle<=90:
+                    elif (angle > 60) and (angle <= 90):
                         point2 = [mouse_position[0], point2[1]]
                         draw_line(
                             parent=pad_name,

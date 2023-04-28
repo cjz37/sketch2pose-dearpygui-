@@ -12,17 +12,11 @@ from db_manage import saveDatabase
 
 from dearpygui.dearpygui import *
 
-# file_path = ''
-
 
 def saveTool():
 
-    # Tk().withdraw()
-    # Tk().mainloop()
-
     hwnd = win32gui.FindWindow(None, "Sketch2Pose")
     win32gui.SetForegroundWindow(hwnd)
-    # win32gui.ShowWindow(hwnd, win32con.SW_NORMAL)
     time.sleep(0.1)
     x, y, x1, y1 = win32gui.GetClientRect(hwnd)
     x, y = win32gui.ClientToScreen(hwnd, (x, y))
@@ -32,8 +26,7 @@ def saveTool():
                                   initialfile="New Sketch2Pose",
                                   filetypes=[("JPEG (*.jpg, *.jpeg)", "*.jpg"), ("PNG (*.png)", "*.png"),
                                              ("Sketch2Pose File (*.db)", "*.db")],
-                                  defaultextension=[("JPEG (*.jpg, *.jpeg)", "*.jpg"), ("PNG (*.png)", "*.png"),
-                                                    ("Sketch2Pose File (*.db)", "*.sdw")])
+                                  defaultextension="*.jpg")
 
     if file_path:
 
@@ -48,8 +41,6 @@ def saveTool():
 
 
 def autoSaveTool():
-
-    # Tk().withdraw()
 
     hwnd = win32gui.FindWindow(None, "Sketch2Pose")
     win32gui.SetForegroundWindow(hwnd)

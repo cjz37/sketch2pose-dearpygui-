@@ -52,9 +52,7 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
 
             while True:
                 # Draw line
-
                 # Checking quadrants because of imgui bug
-
                 # Check if user wants to constraint rectangle to square
                 if is_key_down(mvKey_Shift):
                     if get_drawing_mouse_pos()[0] < mouse_position[0]:
@@ -62,9 +60,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                         if get_drawing_mouse_pos()[1] < mouse_position[1]:
                             first_point = [mouse_position[0] - (mouse_position[1] - get_drawing_mouse_pos()[1]), get_drawing_mouse_pos()[1]]
                             second_point = mouse_position
-                            # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                            #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                            #                tag=f"rectangle {tools.rectangle_count}")
                             draw_rectangle(
                                 pmin=first_point,
                                 pmax=second_point,
@@ -79,9 +74,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                         else:
                             first_point = [mouse_position[0] - (get_drawing_mouse_pos()[1] - mouse_position[1]), mouse_position[1]]
                             second_point = [mouse_position[0], get_drawing_mouse_pos()[1]]
-                            # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                            #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                            #                tag=f"rectangle {tools.rectangle_count}")
                             draw_rectangle(
                                 pmin=first_point,
                                 pmax=second_point,
@@ -96,9 +88,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                     elif get_drawing_mouse_pos()[1] < mouse_position[1]:
                         first_point = [mouse_position[0], get_drawing_mouse_pos()[1]]
                         second_point = [mouse_position[0] + (mouse_position[1] - get_drawing_mouse_pos()[1]), mouse_position[1]]
-                        # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                        #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                        #                tag=f"rectangle {tools.rectangle_count}")
                         draw_rectangle(
                             pmin=first_point,
                             pmax=second_point,
@@ -113,9 +102,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                     else:
                         first_point = mouse_position
                         second_point = [mouse_position[0] + (get_drawing_mouse_pos()[1] - mouse_position[1]), get_drawing_mouse_pos()[1]]
-                        # draw_rectangle(pad_name, pmin=mouse_position, pmax=second_point, color=lineColor,
-                        #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                        #                tag=f"rectangle {tools.rectangle_count}")
                         draw_rectangle(
                             pmin=mouse_position,
                             pmax=second_point,
@@ -134,9 +120,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                         if get_drawing_mouse_pos()[1] < mouse_position[1]:
                             first_point = get_drawing_mouse_pos()
                             second_point = mouse_position
-                            # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                            #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                            #                tag=f"rectangle {tools.rectangle_count}")
                             draw_rectangle(
                                 pmin=first_point,
                                 pmax=second_point,
@@ -151,9 +134,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                         else:
                             first_point = [get_drawing_mouse_pos()[0], mouse_position[1]]
                             second_point = [mouse_position[0], get_drawing_mouse_pos()[1]]
-                            # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                            #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                            #                tag=f"rectangle {tools.rectangle_count}")
                             draw_rectangle(
                                 pmin=first_point,
                                 pmax=second_point,
@@ -168,9 +148,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                     elif get_drawing_mouse_pos()[1] < mouse_position[1]:
                         first_point = [mouse_position[0], get_drawing_mouse_pos()[1]]
                         second_point = [get_drawing_mouse_pos()[0], mouse_position[1]]
-                        # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                        #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                        #                tag=f"rectangle {tools.rectangle_count}")
                         draw_rectangle(
                             pmin=first_point,
                             pmax=second_point,
@@ -185,9 +162,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                     else:
                         first_point = mouse_position
                         second_point = get_drawing_mouse_pos()
-                        # draw_rectangle(pad_name, pmin=first_point, pmax=second_point, color=lineColor,
-                        #                thickness=lineThickness, rounding=edgeRounding, fill=fillRectangle,
-                        #                tag=f"rectangle {tools.rectangle_count}")
                         draw_rectangle(
                             pmin=first_point,
                             pmax=second_point,
@@ -204,7 +178,6 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
                 if isMouseButtonLeftReleased():
                     # If the user clicks outside the drawing pad, it is assumed that they want to terminate the tool
                     if get_active_window() != "Drawing Pad":
-                        # delete_draw_command(pad_name, f"rectangle {tools.rectangle_count}")
                         delete_item(f"rectangle {tools.rectangle_count}")
                         break
 
@@ -218,18 +191,15 @@ def rectangleTool(pad_name, lineColor, lineThickness, edgeRounding, fillRectangl
 
                 # Check if user wants to exit the line tool
                 if isMouseButtonRightReleased():
-                    # delete_draw_command(pad_name, f"rectangle {tools.rectangle_count}")
                     delete_item(f"rectangle {tools.rectangle_count}")
                     break
 
                 # Check if user wants to exit the line tool
                 if is_key_released(mvKey_Escape):
-                    # delete_draw_command(pad_name, f"rectangle {tools.rectangle_count}")
                     delete_item(f"rectangle {tools.rectangle_count}")
                     break
 
                 # Delete the line drawn and begin the process again till user clicks the second point or exits the tool
-                # delete_draw_command(pad_name, f"rectangle {tools.rectangle_count}")
                 delete_item(f"rectangle {tools.rectangle_count}")
 
 
@@ -245,7 +215,6 @@ def fillRectangleCheckbox():
             callback=fillRectangleSameCheckbox
         )
         add_spacer(height=2, parent="tool properties", tag="tempSpace2")
-        # add_color_edit4("Fill color", default_value=[0, 255, 255, 255], parent="tool properties", width=155)
         add_color_picker(
             tag="Fill Color",
             alpha_bar=True,
@@ -274,7 +243,6 @@ def fillRectangleSameCheckbox():
     else:
         set_item_height("tool properties", height=255)
         add_spacer(height=2, parent="tool properties", tag="tempSpace2")
-        # add_color_edit4("Fill color", default_value=[0, 255, 255, 255], parent="tool properties", width=155)
         add_color_picker(
             tag="Fill Color",
             alpha_bar=True,

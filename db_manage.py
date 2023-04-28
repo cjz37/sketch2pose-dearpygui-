@@ -7,6 +7,7 @@ import os
 row_count = 0
 row_pointer = 0
 
+
 def create_db():
     conn = sqlite3.connect("SimpleDrawingTemp_db.db")
     c = conn.cursor()
@@ -28,7 +29,6 @@ def create_db():
                     Fill text,
                     Rounding real,
                     Size real,
-                    Text text,
                     Image text,
                     Tag text)""")
 
@@ -98,16 +98,13 @@ def write_db(tool: str, point_1='', point_2='', point_3='', point_4='', color=''
         c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Point_2, Point_3, Point_4, Color, Thickness, Tag)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""", (row_count, tool, point_1, point_2, point_3, point_4, color, thickness, tag))
 
-    elif tool == "curve tool":
-        pass
+    elif tool == "spline tool":
+        c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Point_2, Point_3, Point_4, Color, Thickness, Tag)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)""", (row_count, tool, point_1, point_2, point_3, point_4, color, thickness, tag))
 
     elif tool == "text tool":
         c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Color, Size, Text, Tag)
         VALUES (?, ?, ?, ?, ?, ?, ?)""", (row_count, tool, point_1, color, size, text, tag))
-
-    # elif tool == "canvas color tool":
-    #     c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, CanvasBefore, CanvasAfter)
-    #     VALUES (?, ?, ?, ?)""", (row_count, tool, canvasBefore, canvasAfter))
 
     elif tool == "image tool":
         c.execute("""INSERT INTO SimpleDrawingTools (RowID, Tool, Point_1, Point_2, Image, Tag)
@@ -119,6 +116,7 @@ def write_db(tool: str, point_1='', point_2='', point_3='', point_4='', color=''
     conn.commit()
     conn.close()
 
+
 def readAll_db():
     conn = sqlite3.connect("SimpleDrawingTemp_db.db")
     c = conn.cursor()
@@ -129,6 +127,7 @@ def readAll_db():
         print(row)
 
     conn.close()
+
 
 def read_db(action: str):
     global row_count
@@ -145,17 +144,16 @@ def read_db(action: str):
         tool = c.fetchone()
         tool = tool[0]
 
-        if tool == 'dashed line tool':
-            tag = c.execute(f"SELECT Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
-            tag = c.fetchone()[0]
-            tools.clear_dashed_line(drawing="Pad", tag=tag)
-            row_pointer -= 1
-
+        tag = c.execute(f"SELECT Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
+        tag = c.fetchone()[0]
+        if tag[:6] == "spline":
+            tools.temp_count = 0
+            delete_item("last point")
+            for i in range(99):
+                delete_item(f"{tag} line {i}")
         else:
-            tag = c.execute(f"SELECT Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
-            tag = c.fetchone()[0]
             delete_item(tag)
-            row_pointer -= 1
+        row_pointer -= 1
 
     elif action == "redo":
         if row_pointer == row_count:
@@ -177,19 +175,6 @@ def read_db(action: str):
                 thickness=int(toolInfo[3]),
                 tag=toolInfo[4],
                 parent="Pad",
-            )
-
-        elif tool == 'dashed line tool':
-            toolInfo = c.execute(f"SELECT Point_1, Point_2, Color, Thickness, Spacing, Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
-            toolInfo = c.fetchone()
-            tools.draw_dashed_line(
-                drawing="Pad",
-                p1=string_to_list(toolInfo[0]),
-                p2=string_to_list(toolInfo[1]),
-                color=string_to_list(toolInfo[2]),
-                thickness=int(toolInfo[3]),
-                spacing=toolInfo[4],
-                tag=toolInfo[5],
             )
 
         elif tool == 'doodle tool':
@@ -244,8 +229,19 @@ def read_db(action: str):
                 parent="Pad",
             )
 
-        elif tool == 'curve tool':
-            pass
+        elif tool == 'spline tool':
+            toolInfo = c.execute(f"SELECT Point_1, Point_2, Point_3, Point_4, Color, Thickness, Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
+            toolInfo = c.fetchone()
+            tools.draw_spline_quadratic(
+                p1=string_to_list(toolInfo[0]),
+                p2=string_to_list(toolInfo[1]),
+                p3=string_to_list(toolInfo[2]),
+                p4=string_to_list(toolInfo[3]),
+                color=string_to_list(toolInfo[4]),
+                thickness=int(toolInfo[5]),
+                tag=toolInfo[6],
+                parent="Pad",
+            )
 
         elif tool == 'text tool':
             toolInfo = c.execute(f"SELECT Point_1, Color, Size, Text, Tag FROM SimpleDrawingTools WHERE RowID={row_pointer}")
@@ -327,23 +323,6 @@ def open_db(filepath):
             )
             tools.polyline_count = int(toolInfo[4][-1]) + 1
 
-        elif tool == 'dashed line tool':
-            toolInfo = c.execute(
-                f"SELECT Point_1, Point_2, Color, Thickness, Spacing, Tag FROM SimpleDrawingTools WHERE RowID={row}")
-            toolInfo = c.fetchone()
-
-            tools.draw_dashed_line(
-                drawing="Pad",
-                p1=string_to_list(toolInfo[0]),
-                p2=string_to_list(toolInfo[1]),
-                color=string_to_list(toolInfo[2]),
-                thickness=int(toolInfo[3]),
-                spacing=toolInfo[4],
-                tag=toolInfo[5]
-            )
-
-            tools.dashed_line_count = int(toolInfo[5][-1]) + 1
-
         elif tool == 'doodle tool':
             toolInfo = c.execute(
                 f"SELECT  Point_1, Color, Thickness, Tag FROM SimpleDrawingTools WHERE RowID={row}")
@@ -412,8 +391,22 @@ def open_db(filepath):
 
             tools.bezier_count = int(toolInfo[6][-1]) + 1
 
-        elif tool == 'curve tool':
-            pass
+        elif tool == 'spline tool':
+            toolInfo = c.execute(
+                f"SELECT Point_1, Point_2, Point_3, Point_4, Color, Thickness, Tag FROM SimpleDrawingTools WHERE RowID={row}")
+            toolInfo = c.fetchone()
+
+            tools.draw_spline_quadratic(
+                parent="Pad",
+                p1=string_to_list(toolInfo[0]),
+                p2=string_to_list(toolInfo[1]),
+                p3=string_to_list(toolInfo[2]),
+                p4=string_to_list(toolInfo[3]),
+                color=string_to_list(toolInfo[4]),
+                thickness=int(toolInfo[5]),
+            )
+
+            tools.bezier_count = int(toolInfo[6][-1]) + 1
 
         elif tool == 'text tool':
             toolInfo = c.execute(
@@ -464,6 +457,7 @@ def string_to_list(string, dashed=False):
 
         return string
 
+
 def saveDatabase(filepath):
     original = os.path.abspath("SimpleDrawingTemp_db.db")
     target = filepath
@@ -493,8 +487,6 @@ def reset_db():
                         Spacing real,
                         Fill text,
                         Rounding real,
-                        Size real,
-                        Text text,
                         Image text,
                         Tag text)""")
 

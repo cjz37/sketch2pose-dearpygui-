@@ -106,8 +106,8 @@ def initPad(pad_name, control_points, body_width, joints):
 
         draw_body(i, center, first_point, second_point, pad_name)
 
-    num = len(joints)
-    for i in range(num):
+    show_index = [0, 1, 2, 3, 6, 7, 8, 9]
+    for i in show_index:
         draw_circle(
             center=joints[i]['pos'],
             radius=joint_radius,
@@ -117,12 +117,11 @@ def initPad(pad_name, control_points, body_width, joints):
             parent=pad_name,
         )
 
-    # 更新手掌
+    # 去除不需要显示的关节点
     i = 7
     delete_old_item(i)
     i = 8
     delete_old_item(i)
-    # 更新脚
     i = 13
     delete_old_item(i)
     i = 14
@@ -299,8 +298,8 @@ def update_joints_angle(joints, rotate_joint, angle):
 def redraw_joints(joints, pad_name):
     joint_radius = 12
 
-    num = len(joints)
-    for i in range(num):
+    show_index = [0, 1, 2, 3, 6, 7, 8, 9]
+    for i in show_index:
         delete_item(f"joint {i}")
         draw_circle(
             center=joints[i]['pos'],
